@@ -3,22 +3,22 @@
       xmlns:og="http://ogp.me/ns#"
       xmlns:fb="http://www.facebook.com/2008/fbml">
   <head>
-    <title>Play'em</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta property="og:title" content="play'em"/>
-    <meta property="og:type" content="website"/>
-    <meta property="og:url" content="http://playem.org/"/>
-    <meta property="og:image" content="http://playem.org/playem.png"/>
-    <meta property="og:description" content="Play'em plays videos that your friends shared on facebook, without having to browse, just like TV."/>
+	<title>Play'em</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta property="og:title" content="play'em"/>
+	<meta property="og:type" content="website"/>
+	<meta property="og:url" content="http://playem.org/"/>
+	<meta property="og:image" content="http://playem.org/playem.png"/>
+	<meta property="og:description" content="Play'em plays videos that your friends shared on facebook, without having to browse, just like TV."/>
 	<meta property="fb:admins" content="510739408"/>
-    <link href="favicon.png" rel="icon" type="image/png" />
-    <link rel="stylesheet" type="text/css" href="base.css">
-    <script src="jquery-1.5.1.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="http://connect.facebook.net/en_US/all.js"></script>
-    <script src="swfobject.js" type="text/javascript" charset="utf-8"></script>
-    <script src="playem.js" type="text/javascript" charset="utf-8"></script>
-    
-    <!--analytics-->
+	<link href="favicon.png" rel="icon" type="image/png" />
+	<link rel="stylesheet" type="text/css" href="base.css">
+	<script src="jquery-1.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="http://connect.facebook.net/en_US/all.js"></script>
+	<script src="swfobject.js" type="text/javascript" charset="utf-8"></script>
+	<script src="playem.js" type="text/javascript" charset="utf-8"></script>
+
+<!--analytics-->
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -30,35 +30,34 @@
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
-
 </script>
   </head>
   <body>
-    <div class="back backimg">&nbsp;</div>
-    <div class="back gradient"><img src="playem.png" alt="Play'em"/></div>
+	<div class="back backimg">&nbsp;</div>
+	<div class="back gradient"><img src="playem.png" alt="Play'em"/></div>
 	<div style="position:absolute;top:3px;right:3px;">
 		<iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fplayem.org&amp;layout=button_count&amp;show_faces=false&amp;width=100&amp;action=like&amp;font&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px; position:relative; top:1px; left:10px;" allowTransparency="true"></iframe>
 		<a href="http://twitter.com/share" class="twitter-share-button" data-url="http://playem.org" data-text="When there's nothing cool on TV, I watch my friends' videos on #playem! Check it out! #youtube #facebook #social" >Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 	</div>
 	
-  	<div id="welcome">
-  	<p>Welcome to play'em!</p>
-  	<p>Connect to your facebook account, so that we can gather a playlist from your friends' shared videos.</p>
-  	<p><a href="javascript:login()"><img src="facebook_connect_large.png" alt="click here to login"/></a></p>
-    </div>
-    
-    <div id="container" style="display:none;">
-  	<div id="player">
-  	  <ul id="playlist"></ul>
-  	  <div id="videoEmbed"></div>
-  	  <div id="socialPane"></div>
-  	</div>
-    </div>
-  
-    <p id="footer"><a href="http://joly.adrien.free.fr/" target="_blank" title="play'em, a weekend project by adrien joly">@adrienjoly</a></p>
-  
-    <div id="fb-root"></div>
-    
+	<div id="welcome">
+		<p>Welcome to play'em!</p>
+		<p>Connect to your facebook account, so that we can gather a playlist from your friends' shared videos.</p>
+		<p><a href="javascript:login()"><img src="facebook_connect_large.png" alt="click here to login"/></a></p>
+	</div>
+	
+	<div id="container" style="display:none;">
+		<div id="player">
+			<ul id="playlist"></ul>
+			<div id="videoEmbed"></div>
+			<div id="socialPane"></div>
+		</div>
+	</div>
+	
+	<p id="footer"><a href="http://joly.adrien.free.fr/" target="_blank" title="play'em, a weekend project by adrien joly">@adrienjoly</a></p>
+	
+	<div id="fb-root"></div>
+
 <!-- begin olark code --><script type='text/javascript'>/*{literal}<![CDATA[*/window.olark||(function(i){var e=window,h=document,a=e.location.protocol=="https:"?"https:":"http:",g=i.name,b="load";(function(){e[g]=function(){(c.s=c.s||[]).push(arguments)};var c=e[g]._={},f=i.methods.length; while(f--){(function(j){e[g][j]=function(){e[g]("call",j,arguments)}})(i.methods[f])} c.l=i.loader;c.i=arguments.callee;c.f=setTimeout(function(){if(c.f){(new Image).src=a+"//"+c.l.replace(".js",".png")+"&"+escape(e.location.href)}c.f=null},20000);c.p={0:+new Date};c.P=function(j){c.p[j]=new Date-c.p[0]};function d(){c.P(b);e[g](b)}e.addEventListener?e.addEventListener(b,d,false):e.attachEvent("on"+b,d); (function(){function l(j){j="head";return["<",j,"></",j,"><",z,' onl'+'oad="var d=',B,";d.getElementsByTagName('head')[0].",y,"(d.",A,"('script')).",u,"='",a,"//",c.l,"'",'"',"></",z,">"].join("")}var z="body",s=h[z];if(!s){return setTimeout(arguments.callee,100)}c.P(1);var y="appendChild",A="createElement",u="src",r=h[A]("div"),G=r[y](h[A](g)),D=h[A]("iframe"),B="document",C="domain",q;r.style.display="none";s.insertBefore(r,s.firstChild).id=g;D.frameBorder="0";D.id=g+"-loader";if(/MSIE[ ]+6/.test(navigator.userAgent)){D.src="javascript:false"} D.allowTransparency="true";G[y](D);try{D.contentWindow[B].open()}catch(F){i[C]=h[C];q="javascript:var d="+B+".open();d.domain='"+h.domain+"';";D[u]=q+"void(0);"}try{var H=D.contentWindow[B];H.write(l());H.close()}catch(E){D[u]=q+'d.write("'+l().replace(/"/g,String.fromCharCode(92)+'"')+'");d.close();'}c.P(2)})()})()})({loader:(function(a){return "static.olark.com/jsclient/loader0.js?ts="+(a?a[1]:(+new Date))})(document.cookie.match(/olarkld=([0-9]+)/)),name:"olark",methods:["configure","extend","declare","identify"]});
 /* custom configuration goes here (www.olark.com/documentation) */
 olark.identify('6373-737-10-6529');/*]]>{/literal}*/</script>
@@ -66,4 +65,3 @@ olark.identify('6373-737-10-6529');/*]]>{/literal}*/</script>
 
   </body>
 </html>
-

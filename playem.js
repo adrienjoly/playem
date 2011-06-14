@@ -27,7 +27,8 @@ $(window).ready(function() {
     if (vid && vid.length===2) {
       vid = {i:vids.length, id:vid[1], name:fbItem.name, desc:fbItem.description,
         url:'http://www.youtube.com/v/' + vid[1] + '?enablejsapi=1&fs=1',
-        from:fbItem.from, time:fbItem.updated_time, msg:fbItem.message };
+        from:fbItem.from, time:fbItem.updated_time, msg:fbItem.message,
+        fbUrl:fbItem.actions[0].link };
       console.log("adding", vid.name, vid);
       vid.li = $("<li>"+vid.name+"</li>").click(function() { playVid(vid) }).appendTo(playlist);
       vids.push(vid);
@@ -35,13 +36,17 @@ $(window).ready(function() {
   };
   
   var playVid = function (vid) {
+    $("#playCursor").remove();
+    //if (current) current.li.html(current.li.html().substr(2)); // remove the "play" symbol
     current = vid;
     console.log("playing", vid.name);
+    //current.li.html("► " + current.li.html()); // add the "play" symbol
+    current.li.prepend("<span id='playCursor'>► </span>");
     $("li").css('color', 'gray');
     current.li.css('color', 'white');
     $("#socialPane").html('<p>Shared by:</p><img src="http://graph.facebook.com/' + vid.from.id + '/picture"/>'
       + '<p>' + vid.from.name + (vid.msg ? ": " + vid.msg : "") + '</p>'
-      + '<p class="timestamp">' +vid.time + '</p>')
+      + '<p class="timestamp"><a href="'+vid.fbUrl+'" title="like/comment on facebook">' +vid.time + '</a></p>')
     swfobject.embedSWF(vid.url, 'videoEmbed', '425', '344', '9.0.0', '', flashvars, params, attributes);
     
     window.playNext = function() {
