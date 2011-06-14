@@ -65,7 +65,7 @@ $(window).ready(function() {
   
   var loadMore = function(until) {
     console.log("loadMore", feedOffset, until);
-    var params = until ? {until:until} : {};
+    var params = until ? {until:until,type:"video"} : {};
     FB.api('/me/home', params, function(feed) {
       for (var i in feed.data) {
         /*console.log*/(i = feed.data[i]);
