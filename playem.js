@@ -8,8 +8,8 @@ $(window).ready(function() {
     vids = [],
     feedOffset = 0,
     playlist = $("#playlist"),
-    youtubeRegex = /v=([a-zA-Z0-9_\-]+)/,
-    youtubeUrl = /^http\:\/\/www\.youtube\.com\/watch/;
+    youtubeRegex = /v[=\/]([a-zA-Z0-9_\-]+)/,
+    youtubeUrl = /^http[s]?\:\/\/www\.youtube\.com\//;
 
   var flashvars = {autoplay:1}, attributes = {};
   var params = {
@@ -29,36 +29,31 @@ $(window).ready(function() {
         url:'http://www.youtube.com/v/' + vid[1] + '?enablejsapi=1&fs=1',
         from:fbItem.from, time:fbItem.updated_time, msg:fbItem.message,
         fbUrl:fbItem.actions[0].link };
-      console.log("adding", vid.name, vid);
+      //console.log("adding", vid.name, vid);
       vid.li = $("<li>"+vid.name+"</li>").click(function() { playVid(vid) }).appendTo(playlist);
       vids.push(vid);
     }
   };
   
   var playVid = function (vid) {
-    $("#playCursor").remove();
-    //if (current) current.li.html(current.li.html().substr(2)); // remove the "play" symbol
-    current = vid;
-    console.log("playing", vid.name);
-    //current.li.html("► " + current.li.html()); // add the "play" symbol
-    current.li.prepend("<span id='playCursor'>► </span>");
     $("li").css('color', 'gray');
-    current.li.css('color', 'white');
+    $("#playCursor").remove();
+    current = vid;
+    //console.log("playing", vid.name);
+    current.li.css('color', 'white').prepend("<span id='playCursor'>► </span>");
     $("#socialPane").html('<p>Shared by:</p><img src="http://graph.facebook.com/' + vid.from.id + '/picture"/>'
       + '<p>' + vid.from.name + (vid.msg ? ": " + vid.msg : "") + '</p>'
       + '<p class="timestamp"><a href="'+vid.fbUrl+'" title="like/comment on facebook">' +vid.time + '</a></p>')
     swfobject.embedSWF(vid.url, 'videoEmbed', '425', '344', '9.0.0', '', flashvars, params, attributes);
     
     window.playNext = function() {
-      console.log("playNext");
-      var next = vid.i+1 % vids.length;
-      current = vids[next];
-      playVid(current);
+      //console.log("playNext");
+      playVid(current = vids[vid.i+1 % vids.length]);
     };  
   };
   
   window.onytplayerStateChange = function (newState) {
-    console.log("newState", newState);
+    //console.log("newState", newState);
     if (newState == 0) // end of video
       playNext();
   };
@@ -70,15 +65,10 @@ $(window).ready(function() {
   
   var loadMore = function(until) {
     console.log("loadMore", feedOffset, until);
-    
-    var params = {/*offset:feedOffset, limit:feedOffset+100*/};
-    if (until) params.until = until;
-    
+    var params = until ? {until:until} : {};
     FB.api('/me/home', params, function(feed) {
-      console.log("feed", feed.data);
       for (var i in feed.data) {
-        i = feed.data[i];
-        console.log(i);
+        /*console.log*/(i = feed.data[i]);
         if (i.type=="video" && i.link && i.link.match(youtubeUrl)) // TODO: support source: "http://www.youtube.com/v/XvifS2QOun4?version=3&feature=autoshare&autoplay=1"
           addVid(i);
       }
@@ -98,7 +88,6 @@ $(window).ready(function() {
       loadMore();
     }
     else {
-      console.log("The user has logged out, and the cookie has been cleared");
       $("#welcome").show();
       $("#container").hide();
       user = null;
@@ -108,7 +97,5 @@ $(window).ready(function() {
   login = function() {
     FB.login(onFacebookSessionEvent, {perms:'read_stream'});
   };
-    
-  console.log("ready, waiting for login.");
 });
 
