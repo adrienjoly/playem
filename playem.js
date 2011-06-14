@@ -23,15 +23,18 @@ $(window).ready(function() {
   
   var addVid = function (fbItem) {
     var vidUrl = fbItem.link;
-    var vid = vidUrl.match(youtubeRegex);
-    if (vid && vid.length===2) {
-      vid = {i:vids.length, id:vid[1], name:fbItem.name, desc:fbItem.description,
-        url:'http://www.youtube.com/v/' + vid[1] + '?enablejsapi=1&fs=1',
-        from:fbItem.from, time:fbItem.updated_time, msg:fbItem.message,
-        fbUrl:fbItem.actions[0].link };
-      //console.log("adding", vid.name, vid);
-      vid.li = $("<li>"+vid.name+"</li>").click(function() { playVid(vid) }).appendTo(playlist);
-      vids.push(vid);
+    console.log(vidUrl);
+    if (vidUrl.match(youtubeUrl)) {
+      var vid = vidUrl.match(youtubeRegex);
+      if (vid && vid.length===2) {
+        vid = {i:vids.length, id:vid[1], name:fbItem.name, desc:fbItem.description,
+          url:'http://www.youtube.com/v/' + vid[1] + '?enablejsapi=1&fs=1',
+          from:fbItem.from, time:fbItem.updated_time, msg:fbItem.message,
+          fbUrl:fbItem.actions[0].link };
+        //console.log("adding", vid.name, vid);
+        vid.li = $("<li>"+vid.name+"</li>").click(function() { playVid(vid) }).appendTo(playlist);
+        vids.push(vid);
+      }
     }
   };
   
@@ -65,11 +68,11 @@ $(window).ready(function() {
   
   var loadMore = function(until) {
     console.log("loadMore", feedOffset, until);
-    var params = until ? {until:until,type:"video"} : {};
+    var params = until ? {until:until} : {};
     FB.api('/me/home', params, function(feed) {
       for (var i in feed.data) {
         /*console.log*/(i = feed.data[i]);
-        if (i.type=="video" && i.link && i.link.match(youtubeUrl)) // TODO: support source: "http://www.youtube.com/v/XvifS2QOun4?version=3&feature=autoshare&autoplay=1"
+        if (i.type=="video" && i.link)
           addVid(i);
       }
       if (!current && vids.length > 0)
