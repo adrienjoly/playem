@@ -30,7 +30,7 @@ $(window).ready(function() {
           url:'http://www.youtube.com/v/' + vid + '?enablejsapi=1&fs=1',
           from:fbItem.from, time:fbItem.updated_time, msg:fbItem.message,
           fbUrl:fbItem.actions[0].link };
-        console.log("adding", vid.name, vid);
+        //console.log("adding", vid.name, vid);
         vid.li = $("<li>"+vid.name+"</li>").click(function() { playVid(vid) }).appendTo(playlist);
         vids.push(vid);
     }
@@ -77,7 +77,7 @@ $(window).ready(function() {
         playVid(vids[0]);
         
       feedOffset += feed.data.length;
-      if (vids.length < 10 && feed.data.length > 0 && feedOffset < 200)
+      if (feed.data.length > 0 /*&& vids.length < 10 && feedOffset < 200*/)
         loadMore(feed.paging.next.substr(feed.paging.next.lastIndexOf("=")+1));
     });
   };
