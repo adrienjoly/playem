@@ -3,31 +3,49 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="base.css">
-  	<script src="jquery-1.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="jquery-1.5.1.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="http://connect.facebook.net/en_US/all.js"></script>
     <script src="swfobject.js" type="text/javascript" charset="utf-8"></script>
     <script src="playem.js" type="text/javascript" charset="utf-8"></script>
-<title>Play'em</title>
+    <title>Play'em</title>
     
+    <!--analytics-->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-1858235-3']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
   </head>
   <body>
-  <h1>Play'em</h1>
+    <div class="back backimg">&nbsp;</div>
+    <div class="back gradient"><img src="playem.png" alt="Play'em"/></div>
+    
+  	<div id="welcome">
+  	<p>Welcome to play'em!</p>
+  	<p>Connect to your facebook account, so that we can gather a playlist from your friends' shared videos.</p>
+  	<p><a href="javascript:login()"><img src="facebook_connect_large.png" alt="click here to login"/></a></p>
+    </div>
+    
+    <div id="container" style="display:none;">
+  	<div id="player">
+  	  <ul id="playlist"></ul>
+  	  <div id="videoEmbed"></div>
+  	  <div id="socialPane"></div>
+  	</div>
+    </div>
   
-	<div id="welcome">
-	<p>Welcome to play'em!</p>
-	<p>Connect to your facebook account, so that we can gather a playlist from your friends' shared videos.</p>
-	<p><a href="javascript:login()"><img src="facebook_connect_large.png" alt="click here to login"/></a></p>
-  </div>
+    <p id="footer"><a href="http://joly.adrien.free.fr/" target="_blank" title="play'em, a weekend project by adrien joly">@adrienjoly</a></p>
   
-  <div id="container" style="display:none;">
-	<div id="player">
-	  <ul id="playlist"></ul>
-		<div id="videoEmbed"></div>
-	  <div id="socialPane"></div>
-	</div>
-  </div>
-
-  <div id="fb-root"></div>
+    <div id="fb-root"></div>
+    
   </body>
 </html>
 

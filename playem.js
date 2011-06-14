@@ -1,4 +1,7 @@
 $(window).ready(function() {
+
+  if (undefined == window.console) 
+    console = {log:function(){}};
   
   var //user = null,
     current = null,
@@ -26,14 +29,16 @@ $(window).ready(function() {
         url:'http://www.youtube.com/v/' + vid[1] + '?enablejsapi=1&fs=1',
         from:fbItem.from, time:fbItem.updated_time, msg:fbItem.message };
       console.log("adding", vid.name, vid);
+      vid.li = $("<li>"+vid.name+"</li>").click(function() { playVid(vid) }).appendTo(playlist);
       vids.push(vid);
-      $("<li>"+vid.name+"</li>").click(function() { playVid(vid) }).appendTo(playlist);
     }
   };
   
   var playVid = function (vid) {
     current = vid;
     console.log("playing", vid.name);
+    $("li").css('color', 'gray');
+    current.li.css('color', 'white');
     $("#socialPane").html('<p>Shared by:</p><img src="http://graph.facebook.com/' + vid.from.id + '/picture"/>'
       + '<p>' + vid.from.name + (vid.msg ? ": " + vid.msg : "") + '</p>'
       + '<p class="timestamp">' +vid.time + '</p>')
