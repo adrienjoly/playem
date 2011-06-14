@@ -78,8 +78,8 @@ a:hover{
 
 #player {
   position:absolute;
-  left:-400px;
-  width:800px;
+  left:-372px;
+  /*width:744px;*/
   background:black;
   padding:1px;
   margin:1px;
@@ -113,17 +113,17 @@ li:hover {
   position:relative;
   display:inline-block;
   border:1px solid #444;
-  width:588px;
+  width:530px;
   height:360px;
   padding:1px;
   overflow:hidden;
 }
 
 #socialPane {
-  position:relative;
+  position:absolute;
   border:1px solid #444;
-  left:207px;
-  width:590px;
+  right:1px;
+  width:530px;
   height:130px;
   padding:1px;
   white-space:normal;
