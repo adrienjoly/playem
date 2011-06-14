@@ -8,8 +8,7 @@ $(window).ready(function() {
     vids = [],
     feedOffset = 0,
     playlist = $("#playlist"),
-    youtubeRegex = /v[=\/]([a-zA-Z0-9_\-]+)/,
-    youtubeUrl = /^http[s]?\:\/\/www\.youtube\.com\//;
+    youtubeRegex = /^http[s]?\:\/\/(www\.)?youtu(\.)?be(\.com)?\/(watch\?v=)?(v\/)?([a-zA-Z0-9_\-]+)/;
 
   var flashvars = {autoplay:1}, attributes = {};
   var params = {
@@ -24,17 +23,16 @@ $(window).ready(function() {
   var addVid = function (fbItem) {
     var vidUrl = fbItem.link;
     console.log(vidUrl);
-    if (vidUrl.match(youtubeUrl)) {
-      var vid = vidUrl.match(youtubeRegex);
-      if (vid && vid.length===2) {
-        vid = {i:vids.length, id:vid[1], name:fbItem.name, desc:fbItem.description,
-          url:'http://www.youtube.com/v/' + vid[1] + '?enablejsapi=1&fs=1',
+    var vid = vidUrl.match(youtubeRegex);
+    if (vid) {
+        vid = vid.pop();
+        vid = {i:vids.length, id:vid, name:fbItem.name, desc:fbItem.description,
+          url:'http://www.youtube.com/v/' + vid + '?enablejsapi=1&fs=1',
           from:fbItem.from, time:fbItem.updated_time, msg:fbItem.message,
           fbUrl:fbItem.actions[0].link };
-        //console.log("adding", vid.name, vid);
+        console.log("adding", vid.name, vid);
         vid.li = $("<li>"+vid.name+"</li>").click(function() { playVid(vid) }).appendTo(playlist);
         vids.push(vid);
-      }
     }
   };
   
