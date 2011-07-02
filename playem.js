@@ -89,7 +89,7 @@ $(window).ready(function() {
 				method: 'feed',
 				message: "I have found this great video shared by " + vid.from + ", thanks to Play'em!",
 				name: vid.name,
-				link: 'http://playem.org/playem.png',
+				link: 'http://playem.org/?yt='+vid.id,
 				picture: 'http://playem.org/playem.png',
 				caption: "I have found this great video shared by " + vid.from + ", thanks to Play'em!",
 				description: "Play'em is a simple way to watch the cool videos you friends share on Facebook. Play in one click, no browsing required, just like TV!",
