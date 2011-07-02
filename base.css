@@ -148,4 +148,5 @@ li:hover {
 	background: url("facebook_share.png") no-repeat;
 	width: 50px;
 	height: 17px;
+	cursor:pointer;
 }

@@ -63,7 +63,7 @@ $(window).ready(function() {
 		$("#socialPane").html('<p>Shared by:</p><img src="http://graph.facebook.com/' + vid.from.id + '/picture"/>'
 			+ '<p>' + vid.from.name + (vid.msg ? ": " + vid.msg : "") + '</p>'
 			+ '<p class="timestamp"><a href="'+vid.fbUrl+'" title="comment on facebook">' +vid.time + '</a></p>'
-			+ '<span class="postShareFB" onclick="shareVideo">&nbsp;</span>')
+			+ '<span class="postShareFB" onclick="shareVideo()">&nbsp;</span>')
 		swfobject.embedSWF(vid.url, 'videoEmbed', '425', '344', '9.0.0', '', flashvars, params, attributes);
     
 		window.playNext = function() {
