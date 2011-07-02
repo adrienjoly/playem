@@ -18,8 +18,8 @@ $(window).ready(function() {
 	var params = {
 		allowFullScreen: "true",
 		allowscriptaccess: "always",
-		autoplay: 1
-	//wmode: "opaque"
+		autoplay: 1,
+		wmode: "opaque"
 	};
 
 	FB.init({
