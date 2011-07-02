@@ -87,13 +87,13 @@ $(window).ready(function() {
 		var vid = window.current;
 		FB.ui({
 				method: 'feed',
-				message: "I have found this great video shared by " + vid.from + ", thanks to Play'em!",
+				message: "I have found this great video shared by " + vid.from.name + ", thanks to Play'em!",
 				name: vid.name,
 				link: 'http://playem.org/?yt='+vid.id,
-				picture: 'http://playem.org/playem.png',
-				caption: "I have found this great video shared by " + vid.from + ", thanks to Play'em!",
+				picture: 'http://i.ytimg.com/vi/' + vid.id + '/0.jpg', //'http://playem.org/playem.png',
+				caption: "I have found this great video shared by " + vid.from.name + ", thanks to Play'em!",
 				description: "Play'em is a simple way to watch the cool videos you friends share on Facebook. Play in one click, no browsing required, just like TV!",
-				actions:  {name:'Watch my friend\'s TV', link:'http://playem.org/'}
+				actions:  {name:'Watch Play\'em TV', link:'http://playem.org/'}
 			},
 			function(response) {
 				if (response && response.post_id) {
