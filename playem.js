@@ -89,7 +89,7 @@ $(window).ready(function() {
 				method: 'feed',
 				message: "I have found this great video shared by " + vid.from.name + ", thanks to Play'em!",
 				name: vid.name,
-				link: 'http://playem.org/?yt='+vid.id,
+				link: 'http://playem.org/#yt='+vid.id,
 				picture: 'http://i.ytimg.com/vi/' + vid.id + '/0.jpg', //'http://playem.org/playem.png',
 				caption: "I have found this great video shared by " + vid.from.name + ", thanks to Play'em!",
 				description: "Play'em is a simple way to watch the cool videos you friends share on Facebook. Play in one click, no browsing required, just like TV!",
@@ -177,9 +177,9 @@ $(window).ready(function() {
 		});
 	};
   
-	var ytLink = window.location.href.indexOf("?yt=");
+	var ytLink = window.location.href.indexOf("yt=");
 	if (ytLink > 0)
-		openVideoOverlay('http://www.youtube.com/v/' + window.location.href.substr(ytLink+4));
+		openVideoOverlay('http://www.youtube.com/v/' + window.location.href.substr(ytLink+3));
 	else if (window.startOnLoad)
 		loadMore();
 });
