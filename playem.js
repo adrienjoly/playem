@@ -8,7 +8,7 @@ $(window).ready(function() {
     vids = [],
     feedOffset = 0,
     playlist = $("#playlist"),
-    youtubeRegex = /^http[s]?\:\/\/(www\.)?youtu(\.)?be(\.com)?\/(watch\?v=)?(v[\/=])?([a-zA-Z0-9_\-]+)/;
+    youtubeRegex = /^http[s]?\:\/\/(www\.)?youtu(\.)?be(\.com)?\/(watch\?v=)?(v\/)?([a-zA-Z0-9_\-]+)/;
 
   var flashvars = {autoplay:1}, attributes = {};
   var params = {
