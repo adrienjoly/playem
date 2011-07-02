@@ -1,46 +1,38 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-	<head>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:og="http://ogp.me/ns#"
+      xmlns:fb="http://www.facebook.com/2008/fbml">
+<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta property="og:title" content="play'em"/>
+	<meta property="og:type" content="website"/>
+	<meta property="og:url" content="http://playem.org/"/>
+	<meta property="og:image" content="http://playem.org/playem.png"/>
+	<meta property="og:description" content="Play'em plays videos that your friends shared on facebook, without having to browse, just like TV."/>
+	<meta property="fb:admins" content="510739408"/>
+	<link href="favicon.png" rel="icon" type="image/png" />
+	<script src="/jquery-1.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="http://connect.facebook.net/en_US/all.js"></script>
+	<script src="/swfobject.js" type="text/javascript" charset="utf-8"></script>
+	<script>window.startOnLoad = true;</script>
+	<script src="/playem.js" type="text/javascript" charset="utf-8"></script>
 	<title>Play'em | TV made by your friends!</title>
-	
-	<link rel="stylesheet" type="text/css" href="js/youTubeEmbed/youTubeEmbed-jquery-1.0.css" />
 	<link rel="stylesheet" href="styles.css"/>
 
-	</head>
-	<body>
+</head>
+<body>
 	
 	<div id="player-box">
-	<img id="logo-home" src="images/playem-logo-home.png" alt="playem-logo-home" width="394" height="138" />
-	
+		<img id="logo-home" src="images/playem-logo-home.png" alt="playem-logo-home" width="394" height="138" />
 
-
-
-
-
-
-	<div id="player">
-	
-	<img src="images/player.png" alt="player" width="531" height="362" />
+		<div id="player">
+		</div>
 	
 	</div>
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	
-	
-	</div>
-	
-	
 	
 	<div id="copyright">© Copyright 2011 - Playem Concept & Code by <a href="http://adrienjoly.com/" target="_blank">AdrienJojy</a> | Designed by <a href="http://www.englar-design.com/" target="_blank">EnglarDesign</a></div>
 	
+	<div id="fb-root"></div>
 	
 	</body>
 </html>

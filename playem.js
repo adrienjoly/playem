@@ -99,5 +99,8 @@ $(window).ready(function() {
     var handler = nextPage ? function(){ window.location.href = nextPage; } : onFacebookSessionEvent;
     FB.login(handler, {perms:'read_stream'});
   };
+  
+  if (window.startOnLoad)
+	  loadMore();
 });
 
