@@ -104,6 +104,36 @@ $(window).ready(function() {
 			}
 		);
 	};
+	
+	var modalDialogParams = {
+		overlayClose:true,
+		onOpen: function (dialog) {
+			dialog.overlay.fadeIn('fast', function () {
+				dialog.data.hide();
+				dialog.container.fadeIn('fast', function () {
+					dialog.data.slideDown('fast');
+				});
+			});
+		}
+	};
+
+	var modalContentParams = {
+		overlayClose:true,
+		overlayCss:{"background-color":"black"},
+		containerCss:{ height:"350px", width:"430px", filter:"alpha(opacity=100)", "-moz-opacity":1, opacity:1},
+			onOpen: function (dialog) {
+				dialog.overlay.fadeIn('fast', function () {
+					dialog.container.fadeIn('fast', function () {
+						dialog.data.show();
+					});
+				});
+			}
+	};
+
+	function openVideoOverlay(videoUrl) {
+		swfobject.embedSWF(videoUrl, 'modalEmbed', '425', '344', '9.0.0', '', flashvars, params, attributes);
+		$('#modalEmbed').modal(modalContentParams);
+	}
   
 	var loadMore = function(until) {
 		console.log("loadMore", feedOffset, until);
@@ -147,7 +177,10 @@ $(window).ready(function() {
 		});
 	};
   
-	if (window.startOnLoad)
+	var ytLink = window.location.href.indexOf("?yt=");
+	if (ytLink > 0)
+		openVideoOverlay('http://www.youtube.com/v/' + window.location.href.substr(ytLink+4));
+	else if (window.startOnLoad)
 		loadMore();
 });
 
