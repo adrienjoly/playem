@@ -1,0 +1,58 @@
+body{
+	background: url(images/fond-ramp.jpg) top left no-repeat, url(images/fond.jpg) top left;
+}
+
+
+/* LOGIN PAGE */
+
+#login-box{	
+	text-align: center;
+	width: 400px;
+	height: 300px;
+	position: absolute;
+	top: 50%;
+	margin-top: -150px;
+	left:50%;
+	margin-left: -200px;
+	
+	font-family: Verdana;
+	font-size: 12px;
+	color: white;
+	text-shadow: 0px 1px 0px #000;
+}
+
+/* HOME PAGE */
+
+#player-box{	
+	text-align: center;
+	width: 800px;
+	height: 400px;
+	margin-top: 70px;
+	margin-left: auto;
+	margin-right: auto;
+	
+	font-family: Verdana;
+	font-size: 12px;
+	color: white;
+	text-shadow: 0px 1px 0px #000;
+}
+
+/* COPYRIGHT */
+
+#copyright{
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	font-family: Verdana;
+	font-size: 10px;
+	color: #697389;
+	text-shadow: 0px 1px 0px #000;
+}
+#copyright a, #copyright a:link, #copyright a:visited{
+	color: #7d89a3;
+	text-decoration: none;
+}
+#copyright a:hover{
+	color: #ffffff;
+	text-decoration: none;
+}
