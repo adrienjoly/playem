@@ -10,14 +10,13 @@
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     var done = false;
     var player;
-    
+    /*
     function onPlayerReady(evt) {
     	console.log("ready");
         evt.target.playVideo();
     }
-    
+    */
     function onPlayerStateChange(evt) {
-    	console.log("change");
         if (evt.data == YT.PlayerState.PLAYING && !done) {
             setTimeout(stopVideo, 6000);
             done = true;
@@ -38,7 +37,7 @@
             'autoplay': 1
           },
           events: {
-            'onReady': onPlayerReady,
+            //'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
           }
         });
