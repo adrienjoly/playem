@@ -33,8 +33,8 @@ $(window).ready(function() {
 	var addVid = function (fbItem) {
 		var vidUrl = fbItem.link;
 		console.log(vidUrl);
-		var vid = vidUrl.match(youtubeRegex);
-		if (vid) {
+		var vid = youtubeRegex.exec(vidUrl); //vidUrl.match(youtubeRegex);
+		if (vid && vid.length > 0) {
 			vid = vid.pop();
 			vid = {
 				i:vids.length, 
