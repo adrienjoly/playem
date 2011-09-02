@@ -69,8 +69,9 @@ $(window).ready(function() {
 		var url = vid.url.replace("/v/", "/embed/") + (vid.url.indexOf('?') == -1 ? '?' : '&') + 'autoplay=1';
 		$('#videoEmbed').replaceWith('<iframe id="videoEmbed" src="'+url+'" width="425" height="344" frameborder="0" class="youtube-player" type="text/html" ></iframe>');
     		var iframeWindow = document.getElementById('videoEmbed').contentWindow;
-    		iframeWindow.onytplayerStateChange = window.onytplayerStateChange;
-    		iframeWindow.onYouTubePlayerReady = window.onYouTubePlayerReady;
+    		console.log(iframeWindow);
+    		//iframeWindow.onytplayerStateChange = window.onytplayerStateChange;
+    		//iframeWindow.onYouTubePlayerReady = window.onYouTubePlayerReady;
     		
 		window.playNext = function() {
 			//console.log("playNext");
