@@ -64,7 +64,9 @@ $(window).ready(function() {
 			+ '<p>' + vid.from.name + (vid.msg ? ": " + vid.msg : "") + '</p>'
 			+ '<p class="timestamp"><a href="'+vid.fbUrl+'" title="comment on facebook">' +vid.time + '</a></p>'
 			+ '<span class="postShareFB" onclick="shareVideo()">&nbsp;</span>')
-		swfobject.embedSWF(vid.url, 'videoEmbed', '425', '344', '9.0.0', '', flashvars, params, attributes);
+		//swfobject.embedSWF(vid.url, 'videoEmbed', '425', '344', '9.0.0', '', flashvars, params, attributes);
+		var url = vid.url.replace("/v/", "/embed/") + '?autoplay=1';
+		$('videoEmbed').html('<iframe id="videoEmbed" src="'+url+'" width="425" height="344" frameborder="0" class="youtube-player" type="text/html" ></iframe>');
     
 		window.playNext = function() {
 			//console.log("playNext");
