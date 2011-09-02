@@ -10,7 +10,8 @@ $(window).ready(function() {
 	vids = [],
 	feedOffset = 0,
 	playlist = $("#playlist"),
-	youtubeRegex = /^http[s]?\:\/\/(www\.)?youtu(\.)?be(\.com)?\/(watch\?v=)?(v\/)?([a-zA-Z0-9_\-]+)/;
+	youtubeRegex = ///^http[s]?\:\/\/(www\.)?youtu(\.)?be(\.com)?\/(watch\?v=)?(v\/)?([a-zA-Z0-9_\-]+)/;
+			/(https?\:\/\/(www\.)?youtu(\.)?be(\.com)?\/.*(\?v=|\/v\/)([a-zA-Z0-9_\-]+).*)/g;
 
 	var flashvars = {
 		autoplay:1
@@ -67,7 +68,10 @@ $(window).ready(function() {
 		//swfobject.embedSWF(vid.url, 'videoEmbed', '425', '344', '9.0.0', '', flashvars, params, attributes);
 		var url = vid.url.replace("/v/", "/embed/") + (vid.url.indexOf('?') == -1 ? '?' : '&') + 'autoplay=1';
 		$('#videoEmbed').replaceWith('<iframe id="videoEmbed" src="'+url+'" width="425" height="344" frameborder="0" class="youtube-player" type="text/html" ></iframe>');
-    
+    		var iframeWindow = document.getElementById('videoEmbed').contentWindow;
+    		iframeWindow.onytplayerStateChange = window.onytplayerStateChange;
+    		iframeWindow.onYouTubePlayerReady = window.onYouTubePlayerReady;
+    		
 		window.playNext = function() {
 			//console.log("playNext");
 			playVid(current = vids[vid.i+1 % vids.length]);
@@ -75,7 +79,7 @@ $(window).ready(function() {
 	};
   
 	window.onytplayerStateChange = function (newState) {
-		//console.log("newState", newState);
+		console.log("newState", newState);
 		if (newState == 0) // end of video
 			playNext();
 	};
