@@ -68,9 +68,9 @@ $(window).ready(function() {
 		//swfobject.embedSWF(vid.url, 'videoEmbed', '425', '344', '9.0.0', '', flashvars, params, attributes);
 		console.log('<iframe id="videoEmbed" src="'+vid.url+'" width="425" height="344" frameborder="0" class="youtube-player" type="text/html" ></iframe>');
 		
-		$('#videoEmbed').replaceWith('<iframe id="videoEmbed" src="'+vid.url+'" width="425" height="344" frameborder="0" class="youtube-player" type="text/html" ></iframe>');
-    		var iframeWindow = document.getElementById('videoEmbed').contentWindow;
-    		console.log(iframeWindow);
+		//$('#videoEmbed').replaceWith('<iframe id="videoEmbed" src="'+vid.url+'" width="425" height="344" frameborder="0" class="youtube-player" type="text/html" ></iframe>');
+    		//var iframeWindow = document.getElementById('videoEmbed').contentWindow;
+    		//console.log(iframeWindow);
     		//iframeWindow.onytplayerStateChange = window.onytplayerStateChange;
     		//iframeWindow.onYouTubePlayerReady = window.onYouTubePlayerReady;
     		
