@@ -29,6 +29,15 @@ $(window).ready(function() {
 		cookie: true, 
 		xfbml: true
 	});
+	
+	//Load player api asynchronously.
+    var tag = document.createElement('script');
+    tag.src = "http://www.youtube.com/player_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    var player;
+    
+
   
 	var addVid = function (fbItem) {
 		var vidUrl = fbItem.link;
@@ -66,18 +75,52 @@ $(window).ready(function() {
 			+ '<p class="timestamp"><a href="'+vid.fbUrl+'" title="comment on facebook">' +vid.time + '</a></p>'
 			+ '<span class="postShareFB" onclick="shareVideo()">&nbsp;</span>')
 		//swfobject.embedSWF(vid.url, 'videoEmbed', '425', '344', '9.0.0', '', flashvars, params, attributes);
+		/*
 		$('#videoEmbed').replaceWith('<iframe id="videoEmbed" src="'+vid.url+'" width="425" height="344" frameborder="0" class="youtube-player" type="text/html" ></iframe>');
     		var iframeWindow = document.getElementById('videoEmbed').contentWindow;
     		console.log(iframeWindow);
     		iframeWindow.onytplayerStateChange = window.onytplayerStateChange;
     		iframeWindow.onYouTubePlayerReady = window.onYouTubePlayerReady;
-    		
-		iframeWindow.playNext = window.playNext = function() {
+    	*/
+    	
+        player.stopVideo();
+        player.loadVideoById(vid.id);
+        player.playVideo();
+        
+		//iframeWindow.playNext =
+		window.playNext = function() {
 			//console.log("playNext");
 			playVid(current = vids[vid.i+1 % vids.length]);
 		};  
 	};
-  
+	
+	/*
+    function onPlayerReady(evt) {
+    	console.log("ready");
+        evt.target.playVideo();
+    }
+    */
+    function onPlayerStateChange(evt) {
+		if (evt.data == 0) // end of video
+			playNext();
+    }
+    
+    function onYouTubePlayerAPIReady() {
+    	console.log("ready1");
+        player = new YT.Player('videoEmbed', {
+          height: '344',
+          width: '425',
+          //videoId: 'JW5meKfy3fY',
+          //playerVars : { 'autoplay': 1 },
+          events: {
+            //'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+    }
+
+
+/*
 	window.onytplayerStateChange = function (newState) {
 		console.log("newState", newState);
 		if (newState == 0) // end of video
@@ -88,7 +131,7 @@ $(window).ready(function() {
 		var embed = document.getElementById("videoEmbed");
 		embed.addEventListener("onStateChange", "onytplayerStateChange");
 	};
-  
+*/
 	window.shareVideo = function() {
 		var vid = window.current;
 		FB.ui({
