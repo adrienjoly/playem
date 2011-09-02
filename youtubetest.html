@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html>
+<body>
+<div id="player"></div>
+<script>
+    //Load player api asynchronously.
+    var tag = document.createElement('script');
+    tag.src = "http://www.youtube.com/player_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    var done = false;
+    var player;
+    
+    function onPlayerReady(evt) {
+    	console.log("ready");
+        evt.target.playVideo();
+    }
+    
+    function onPlayerStateChange(evt) {
+    	console.log("change");
+        if (evt.data == YT.PlayerState.PLAYING && !done) {
+            setTimeout(stopVideo, 6000);
+            done = true;
+        }
+    }
+    
+    function stopVideo() {
+        player.stopVideo();
+    }
+    
+    function onYouTubePlayerAPIReady() {
+    	console.log("ready1");
+        player = new YT.Player('player', {
+          height: '390',
+          width: '640',
+          videoId: 'JW5meKfy3fY',
+          playerVars : {
+            'autoplay': 1
+          },
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+    }
+</script>
+</body>
+</html>
