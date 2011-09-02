@@ -10,12 +10,12 @@
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     var done = false;
     var player;
-    /*
+    
     function onPlayerReady(evt) {
     	console.log("ready");
         evt.target.playVideo();
     }
-    */
+    
     function onPlayerStateChange(evt) {
         if (evt.data == YT.PlayerState.PLAYING && !done) {
             setTimeout(stopVideo, 6000);
@@ -24,7 +24,7 @@
     }
     
     function stopVideo() {
-        //player.stopVideo();
+        player.stopVideo();
         player.loadVideoById('GjEsAEsYCw4');
     }
     
@@ -34,11 +34,9 @@
           height: '390',
           width: '640',
           videoId: 'JW5meKfy3fY',
-          playerVars : {
-            'autoplay': 1
-          },
+          //playerVars : { 'autoplay': 1 },
           events: {
-            //'onReady': onPlayerReady,
+            'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
           }
         });
