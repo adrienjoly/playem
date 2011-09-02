@@ -67,7 +67,7 @@ $(window).ready(function() {
 			+ '<span class="postShareFB" onclick="shareVideo()">&nbsp;</span>')
 		//swfobject.embedSWF(vid.url, 'videoEmbed', '425', '344', '9.0.0', '', flashvars, params, attributes);
 		var url = vid.url.replace("/v/", "/embed/");
-		url = (url.indexOf('?') == -1 ? '?' : '&') + 'autoplay=1';
+		url += (url.indexOf('?') == -1 ? '?' : '&') + 'autoplay=1';
 		console.log('<iframe id="videoEmbed" src="'+url+'" width="425" height="344" frameborder="0" class="youtube-player" type="text/html" ></iframe>');
 		
 		//$('#videoEmbed').replaceWith('<iframe id="videoEmbed" src="'+url+'" width="425" height="344" frameborder="0" class="youtube-player" type="text/html" ></iframe>');
