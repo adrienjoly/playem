@@ -41,7 +41,7 @@ $(window).ready(function() {
 				id:vid, 
 				name:fbItem.name, 
 				desc:fbItem.description,
-				url:'http://www.youtube.com/v/' + vid + '?enablejsapi=1&fs=1',
+				url:'http://www.youtube.com/embed/' + vid + '?enablejsapi=1&fs=1&autoplay=1', // /v/
 				from:fbItem.from, 
 				time:fbItem.updated_time, 
 				msg:fbItem.message,
@@ -66,13 +66,11 @@ $(window).ready(function() {
 			+ '<p class="timestamp"><a href="'+vid.fbUrl+'" title="comment on facebook">' +vid.time + '</a></p>'
 			+ '<span class="postShareFB" onclick="shareVideo()">&nbsp;</span>')
 		//swfobject.embedSWF(vid.url, 'videoEmbed', '425', '344', '9.0.0', '', flashvars, params, attributes);
-		var url = vid.url.replace("/v/", "/embed/");
-		url += (url.indexOf('?') == -1 ? '?' : '&') + 'autoplay=1';
-		console.log('<iframe id="videoEmbed" src="'+url+'" width="425" height="344" frameborder="0" class="youtube-player" type="text/html" ></iframe>');
+		console.log('<iframe id="videoEmbed" src="'+vid.url+'" width="425" height="344" frameborder="0" class="youtube-player" type="text/html" ></iframe>');
 		
-		//$('#videoEmbed').replaceWith('<iframe id="videoEmbed" src="'+url+'" width="425" height="344" frameborder="0" class="youtube-player" type="text/html" ></iframe>');
-    		//var iframeWindow = document.getElementById('videoEmbed').contentWindow;
-    		//console.log(iframeWindow);
+		$('#videoEmbed').replaceWith('<iframe id="videoEmbed" src="'+vid.url+'" width="425" height="344" frameborder="0" class="youtube-player" type="text/html" ></iframe>');
+    		var iframeWindow = document.getElementById('videoEmbed').contentWindow;
+    		console.log(iframeWindow);
     		//iframeWindow.onytplayerStateChange = window.onytplayerStateChange;
     		//iframeWindow.onYouTubePlayerReady = window.onYouTubePlayerReady;
     		
