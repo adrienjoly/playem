@@ -117,7 +117,15 @@ $(window).ready(function() {
             'onStateChange': onPlayerStateChange
           }
         });
+        startWhenReady();
     }
+    
+    var remaining = 2; // youtube activation and page ready
+    function startWhenReady() {
+    	console.log("start when ready", remaining);
+    	if (--remaining == 0)
+    		loadMore();
+    };
 
 
 /*
@@ -230,6 +238,6 @@ $(window).ready(function() {
 	if (ytLink > 0)
 		openVideoOverlay('http://www.youtube.com/v/' + window.location.href.substr(ytLink+3));
 	else if (window.startOnLoad)
-		loadMore();
+		startWhenReady();//loadMore();
 });
 
