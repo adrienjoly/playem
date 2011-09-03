@@ -128,7 +128,7 @@ $(window).ready(function() {
     };
 
 
-/*
+/**/
 	window.onytplayerStateChange = function (newState) {
 		console.log("newState", newState);
 		if (newState == 0) // end of video
@@ -139,7 +139,7 @@ $(window).ready(function() {
 		var embed = document.getElementById("videoEmbed");
 		embed.addEventListener("onStateChange", "onytplayerStateChange");
 	};
-*/
+/**/
 	window.shareVideo = function() {
 		var vid = window.current;
 		FB.ui({
