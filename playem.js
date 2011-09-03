@@ -29,14 +29,14 @@ $(window).ready(function() {
 		cookie: true, 
 		xfbml: true
 	});
-	
+	/*
 	//Load player api asynchronously.
     var tag = document.createElement('script');
     tag.src = "http://www.youtube.com/player_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
+    var firstScriptTag = document.getElementById('script');
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     var player;
-    
+    */
 
   
 	var addVid = function (fbItem) {
@@ -74,7 +74,7 @@ $(window).ready(function() {
 			+ '<p>' + vid.from.name + (vid.msg ? ": " + vid.msg : "") + '</p>'
 			+ '<p class="timestamp"><a href="'+vid.fbUrl+'" title="comment on facebook">' +vid.time + '</a></p>'
 			+ '<span class="postShareFB" onclick="shareVideo()">&nbsp;</span>')
-		//swfobject.embedSWF(vid.url, 'videoEmbed', '425', '344', '9.0.0', '', flashvars, params, attributes);
+		swfobject.embedSWF(vid.url, 'videoEmbed', '425', '344', '9.0.0', '', flashvars, params, attributes);
 		/*
 		$('#videoEmbed').replaceWith('<iframe id="videoEmbed" src="'+vid.url+'" width="425" height="344" frameborder="0" class="youtube-player" type="text/html" ></iframe>');
     		var iframeWindow = document.getElementById('videoEmbed').contentWindow;
@@ -82,11 +82,11 @@ $(window).ready(function() {
     		iframeWindow.onytplayerStateChange = window.onytplayerStateChange;
     		iframeWindow.onYouTubePlayerReady = window.onYouTubePlayerReady;
     	*/
-    	
+    	/*
         player.stopVideo();
         player.loadVideoById(vid.id);
         player.playVideo();
-        
+        */
 		//iframeWindow.playNext =
 		window.playNext = function() {
 			//console.log("playNext");
@@ -238,6 +238,7 @@ $(window).ready(function() {
 	if (ytLink > 0)
 		openVideoOverlay('http://www.youtube.com/v/' + window.location.href.substr(ytLink+3));
 	else if (window.startOnLoad)
-		startWhenReady();//loadMore();
+		//startWhenReady();
+		loadMore();
 });
 
