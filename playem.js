@@ -99,7 +99,6 @@ $(window).ready(function() {
     	console.log("ready");
         evt.target.playVideo();
     }
-    */
     function onPlayerStateChange(evt) {
 		if (evt.data == 0) // end of video
 			playNext();
@@ -126,11 +125,12 @@ $(window).ready(function() {
     	if (--remaining == 0)
     		loadMore();
     };
+    */
 
 
 /**/
 	window.onytplayerStateChange = function (newState) {
-		console.log("newState", newState);
+		//console.log("newState", newState);
 		if (newState == 0) // end of video
 			playNext();
 	};
