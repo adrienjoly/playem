@@ -50,7 +50,7 @@ $(window).ready(function() {
 				id:vid, 
 				name:fbItem.name, 
 				desc:fbItem.description,
-				url:'http://www.youtube.com/embed/' + vid + '?enablejsapi=1&fs=1&autoplay=1', // /v/
+				url:'http://www.youtube.com/v/' + vid + '?enablejsapi=1&fs=1&autoplay=1', // /embed/
 				from:fbItem.from, 
 				time:fbItem.updated_time, 
 				msg:fbItem.message,
