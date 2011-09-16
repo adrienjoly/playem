@@ -24,7 +24,7 @@ $(function() {
 	};
 	
 	//FB.Flash.hasMinVersion = function () { return false; };
-	
+	/*
 	console.log("FB.init...");
 
 	FB.init({
@@ -35,6 +35,8 @@ $(function() {
 		oauth : true
 		//channelUrl : 'http://www.playem.org/channel.html'
 	});
+	*/
+	
 	/*
 	//Load player api asynchronously.
     var tag = document.createElement('script');
