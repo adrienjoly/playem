@@ -2,6 +2,8 @@ $(function() {
 
 	if (undefined == window.console) 
 		console = { log:function(){} };
+		
+	console.log("playem init");
 	
 	var //user = null,
 	current = null,
@@ -22,6 +24,8 @@ $(function() {
 	};
 	
 	//FB.Flash.hasMinVersion = function () { return false; };
+	
+	console.log("FB.init...");
 
 	FB.init({
 		appId: "143116132424011", 
@@ -43,7 +47,7 @@ $(function() {
   
 	var addVid = function (fbItem) {
 		var vidUrl = fbItem.link;
-		console.log(vidUrl);
+		//console.log(vidUrl);
 		var vid = youtubeRegex.exec(vidUrl); //vidUrl.match(youtubeRegex);
 		if (vid && vid.length > 0) {
 			vid = vid.pop();
@@ -215,6 +219,7 @@ $(function() {
 	};
   
 	var onFacebookSessionEvent = function(response) {
+		console.log("facebook response", response);
 		if (response.session || response.authResponse) {
 			$("#welcome").hide();
 			$("#container").show();
@@ -231,6 +236,7 @@ $(function() {
 		var handler = nextPage ? function(){
 			window.location.href = nextPage;
 		} : onFacebookSessionEvent;
+		console.log("FB.login...");
 		FB.login(handler, {
 			perms:'read_stream', // legacy
 			scope:'read_stream'  // oauth 2.0
