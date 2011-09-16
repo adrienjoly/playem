@@ -28,7 +28,8 @@ $(window).ready(function() {
 		status: true, 
 		cookie: true, 
 		xfbml: true,
-		oauth : true
+		oauth : true,
+		channelUrl : 'http://www.playem.org/channel.html'
 	});
 	/*
 	//Load player api asynchronously.
