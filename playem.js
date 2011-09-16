@@ -22,6 +22,8 @@ $(window).ready(function() {
 		autoplay: 1,
 		wmode: "opaque"
 	};
+	
+	FB.Flash.hasMinVersion = function () { return false; };
 
 	FB.init({
 		appId: "143116132424011", 
