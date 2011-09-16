@@ -1,9 +1,7 @@
-$(window).ready(function() {
+$(function() {
 
 	if (undefined == window.console) 
-		console = {
-			log:function(){}
-		};
+		console = { log:function(){} };
 	
 	var //user = null,
 	current = null,
@@ -23,15 +21,15 @@ $(window).ready(function() {
 		wmode: "opaque"
 	};
 	
-	FB.Flash.hasMinVersion = function () { return false; };
+	//FB.Flash.hasMinVersion = function () { return false; };
 
 	FB.init({
 		appId: "143116132424011", 
 		status: true, 
 		cookie: true, 
 		xfbml: true,
-		oauth : true,
-		channelUrl : 'http://www.playem.org/channel.html'
+		//oauth : true,
+		//channelUrl : 'http://www.playem.org/channel.html'
 	});
 	/*
 	//Load player api asynchronously.
@@ -217,7 +215,7 @@ $(window).ready(function() {
 	};
   
 	var onFacebookSessionEvent = function(response) {
-		if (response.authResponse) {
+		if (response.session || response.authResponse) {
 			$("#welcome").hide();
 			$("#container").show();
 			loadMore();
@@ -234,7 +232,8 @@ $(window).ready(function() {
 			window.location.href = nextPage;
 		} : onFacebookSessionEvent;
 		FB.login(handler, {
-			scope:'read_stream'
+			perms:'read_stream', // legacy
+			scope:'read_stream'  // oauth 2.0
 		});
 	};
   
