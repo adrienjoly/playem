@@ -27,7 +27,8 @@ $(window).ready(function() {
 		appId: "143116132424011", 
 		status: true, 
 		cookie: true, 
-		xfbml: true
+		xfbml: true,
+		oauth : true
 	});
 	/*
 	//Load player api asynchronously.
@@ -213,7 +214,7 @@ $(window).ready(function() {
 	};
   
 	var onFacebookSessionEvent = function(response) {
-		if (response.session) {
+		if (response.authResponse) {
 			$("#welcome").hide();
 			$("#container").show();
 			loadMore();
@@ -230,7 +231,7 @@ $(window).ready(function() {
 			window.location.href = nextPage;
 		} : onFacebookSessionEvent;
 		FB.login(handler, {
-			perms:'read_stream'
+			scope:'read_stream'
 		});
 	};
   
