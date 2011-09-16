@@ -238,7 +238,7 @@ $(function() {
 		} : onFacebookSessionEvent;
 		console.log("FB.login...");
 		FB.login(handler, {
-			perms:'read_stream', // legacy
+			//perms:'read_stream', // legacy
 			scope:'read_stream'  // oauth 2.0
 		});
 	};
