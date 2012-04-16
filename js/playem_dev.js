@@ -9,38 +9,33 @@ $(function() {
 	current = null,
 	vids = [],
 	feedOffset = 0,
-	playlist = $("#playlist"); /*,
-	youtubeRegex = ///^http[s]?\:\/\/(www\.)?youtu(\.)?be(\.com)?\/(watch\?v=)?(v\/)?([a-zA-Z0-9_\-]+)/;
-			/(https?\:\/\/(www\.)?youtu(\.)?be(\.com)?\/.*(\?v=|\/v\/)([a-zA-Z0-9_\-]+).*)/g;
-  	*/
-	
-	// for swf object
-	var flashvars = {
-		autoplay:1
-	}, attributes = {};
-	var params = {
-		allowFullScreen: "true",
-		allowscriptaccess: "always",
-		autoplay: 1,
-		wmode: "opaque"
-	};
+	playlist = $("#playlist"),
+	$videoEmbed = $("#videoEmbed");
 
   	var embedder = ContentEmbed({
-		detectTypes: ["yt"/*, "dm", "vi", "sc", "wy"*/],
+		detectTypes: ["yt", "dm", "vi", "sc"/*, "wy"*/],
 		ignoreContentType: true
   	});
+
+
+  	var embedParams = {
+  		autoplay:1,
+  		width: $videoEmbed.css("width"),
+  		height: $videoEmbed.css("height")
+  	};
 
 	var addVid = function (fbItem) {
 		var vidUrl = fbItem.link;
 		embedder.extractEmbedRef(vidUrl, function(embedRef){
-			if (embedRef && embedRef.id.indexOf("/yt/") == 0) {
+			if (embedRef && embedRef.id /*&& embedRef.id.indexOf("/yt/") == 0*/) {
 				var vid = embedRef.id.substr(4);
 				vid = {
 					i:vids.length, 
-					id:vid, 
+					id:vid,
+					//url:'http://www.youtube.com/v/' + vid + '?enablejsapi=1&fs=1&autoplay=1', // /embed/
+					html: embedRef.embedType.render(embedRef, embedParams),
 					name:fbItem.name, 
 					desc:fbItem.description,
-					url:'http://www.youtube.com/v/' + vid + '?enablejsapi=1&fs=1&autoplay=1', // /embed/
 					from:fbItem.from, 
 					time:fbItem.updated_time, 
 					msg:fbItem.message,
@@ -52,27 +47,6 @@ $(function() {
 				vids.push(vid);
 			}
 		});
-		/*
-		var vid = youtubeRegex.exec(vidUrl); //vidUrl.match(youtubeRegex);
-		if (vid && vid.length > 0) {
-			vid = vid.pop();
-			vid = {
-				i:vids.length, 
-				id:vid, 
-				name:fbItem.name, 
-				desc:fbItem.description,
-				url:'http://www.youtube.com/v/' + vid + '?enablejsapi=1&fs=1&autoplay=1', // /embed/
-				from:fbItem.from, 
-				time:fbItem.updated_time, 
-				msg:fbItem.message,
-				fbUrl:fbItem.actions[0].link
-			};
-			vid.li = $("<li>"+vid.name+"</li>").click(function() {
-				playVid(vid)
-			}).appendTo(playlist);
-			vids.push(vid);
-		}
-		*/
 	};
   
 	var playVid = function (vid) {
@@ -84,18 +58,38 @@ $(function() {
 			+ '<p>' + vid.from.name + (vid.msg ? ": " + vid.msg : "") + '</p>'
 			+ '<p class="timestamp"><a href="'+vid.fbUrl+'" title="comment on facebook">' +vid.time + '</a></p>'
 			+ '<span class="postShareFB" onclick="shareVideo()">&nbsp;</span>')
-		swfobject.embedSWF(vid.url, 'videoEmbed', '425', '344', '9.0.0', '', flashvars, params, attributes);
+		//swfobject.embedSWF(vid.url, 'videoEmbed', '425', '344', '9.0.0', '', flashvars, params, attributes);
+		$videoEmbed.html(vid.html);
+
+		var iframe = /*window.top.*/$(".youtube-player");
+		iframe.contents().append("<script>function onYouTubePlayerReady(playerId) { alert('coucou ' + playerId) } </script>");
+		console.log("coucou", iframe, iframe.contents());
+		/*
+		if (iframe.length == 0) {
+		    var html = "<html><head><script type='text/javascript'>"
+		                + "this.window.doThis = function() { alert('woot'); };"
+		                + "</script></head><body></body></html>";
+		    iframe = window.top.$("<iframe id='dummyIFrame'>")
+		                .append(html)
+		                .hide()
+		                .css("width", "0px")
+		                .css("height", "0px");
+		    window.top.$("body").append(iframe);
+		}
+		*/
 		window.playNext = function() {
 			playVid(current = vids[vid.i+1 % vids.length]);
 		};  
 	};
 	
 	window.onytplayerStateChange = function (newState) {
+		console.log("player state", newState);
 		if (newState == 0) // end of video
 			playNext();
 	};
 
-	window.onYouTubePlayerReady = function (playerId) {
+	window.top.onYouTubePlayerReady = function (playerId) {
+		console.log("player ready", playerId);
 		var embed = document.getElementById("videoEmbed");
 		embed.addEventListener("onStateChange", "onytplayerStateChange");
 	};
