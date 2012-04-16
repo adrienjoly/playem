@@ -23,12 +23,12 @@ html, body {
 }
 
 .backimg {
-  background:url(playem-back.png)
+  background:url("/img/playem-back.png")
 }
 
 .gradient {
   /* Anciens navigateurs */
-	background: url("gradient-bg.png") repeat-x top;
+	background: url("/img/gradient-bg.png") repeat-x top;
 	/* Navigateurs récents */
 	background: -moz-linear-gradient(
 		top,
@@ -67,6 +67,29 @@ a:hover{
 	top:50%;
 	left:20%;
 	width:60%;
+}
+
+#fbconnect {
+	display: block;
+	background: url("/img/facebook_connect_large.png");
+	width: 300px;
+	height: 40px;
+	opacity:0.8;
+    outline:none;
+    transition: all 0.04s ease-in-out;
+    -webkit-transition: all 0.04s ease-in-out;
+    -moz-transition: all 0.04s ease-in-out;
+}
+
+#fbconnect:hover {
+	opacity:1.0;
+    box-shadow: 0 0 5px rgba(0, 0, 255, 1);
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 255, 1); 
+    -moz-box-shadow: 0 0 5px rgba(0, 0, 255, 1); 
+}
+
+#fbconnect > span {
+	display: none;
 }
 
 #container {
@@ -145,7 +168,7 @@ li:hover {
 
 .postShareFB {
 	float:right;
-	background: url("/facebook_share.png") no-repeat;
+	background: url("/img/facebook_share.png") no-repeat;
 	width: 50px;
 	height: 17px;
 	cursor:pointer;
@@ -164,7 +187,7 @@ li:hover {
 }
 
 #simplemodal-container a.modalCloseImg {
-	background:url(/x.png) no-repeat;
+	background:url("/img/x.png") no-repeat;
 	width:25px; height:29px;
 	display:inline; z-index:3200;
 	position:absolute;
