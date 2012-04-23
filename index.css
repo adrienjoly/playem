@@ -194,3 +194,21 @@ li:hover {
 	top:-15px; right:-16px;
 	cursor:pointer;
 }
+
+/* bookmarklet page */
+
+#bookmarklet {
+	border: 1px solid blue;
+	padding: 5px;
+	border-radius: 5px;
+	background: #47f;
+	opacity:0.8;
+}
+
+#bookmarklet:hover {
+	opacity:1.0;
+    box-shadow: 0 0 5px rgba(0, 0, 255, 1);
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 255, 1); 
+    -moz-box-shadow: 0 0 5px rgba(0, 0, 255, 1);
+    text-decoration: none;
+}
