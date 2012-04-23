@@ -1,0 +1,116 @@
+#playemBookmarklet {
+	display: block;
+	position: fixed;
+	right: 10px;
+	top: 10px;
+	width: 550px;
+	height: 370px;
+	border: 1px solid #b7b7b7;
+	background: white;
+	z-index: 1000;
+	overflow: hidden;
+	-webkit-box-shadow: 0 0 12px rgba(0,0,0,0.65);
+	-moz-box-shadow: 0 0 12px rgba(0,0,0,0.65));
+	-ms-box-shadow: 0 0 12px rgba(0,0,0,0.65);
+	-o-box-shadow: 0 0 12px rgba(0,0,0,0.65);
+	box-shadow: 0 0 12px rgba(0,0,0,0.65);
+}
+
+#playemHeader {
+	position:relative;
+	z-index: 2;
+	width: 100%;
+	margin: 0;
+	padding:0;
+	height: 49px;
+	border-bottom : 2px solid #2469bb;
+	background: rgb(59, 159,  247);
+	background: -moz-linear-gradient(top,rgb(59, 159, 247) 0,rgb(59, 138, 209) 100%);
+	background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,rgb(59, 159, 247)),color-stop(100%,rgb(59, 138, 209)));
+	background: -webkit-linear-gradient(top,rgb(59, 159, 247) 0,rgb(59, 138, 209) 100%);
+	background: -o-linear-gradient(top,rgb(59, 159, 247) 0,rgb(59, 138, 209) 100%);
+	background: -ms-linear-gradient(top,rgb(59, 159, 247) 0,rgb(59, 138, 209) 100%);
+	background: linear-gradient(top,rgb(59, 159, 247) 0,rgb(59, 138, 209) 100%);
+	-webkit-box-shadow: 0 1px 3px rgba(0, 32, 77,0.4);
+	-moz-box-shadow: 0 1px 3px rgba(0, 32, 77,0.4);
+	-ms-box-shadow: 0 1px 3px rgba(0, 32, 77,0.4);
+	-o-box-shadow: 0 1px 3px rgba(0, 32, 77,0.4);
+	box-shadow: 0 1px 3px rgba(0, 32, 77,0.4);
+}
+
+#playemHeader > a {
+	position: absolute;
+	top: 7px;
+	left: 12px;
+}
+
+#playemHeader > div {
+	position: absolute;
+	top: 12px;
+	right: 10px;
+	cursor: pointer;
+}
+
+#playemContent {
+	border: none;
+	width: 550px;
+	height: 320px;
+	overflow: auto;
+}
+
+#playemLoading {
+	position: absolute;
+	top: 160px;
+	left: 0px;
+	width: 550px;
+	text-align: center;
+}
+
+/* extracted content */
+
+.playemThumb {
+	position: relative;
+	padding: 6px;
+	width: 120px;
+	height: 120px;
+	float: left;
+	overflow:hidden;
+	cursor: pointer;
+}
+
+.playemThumb > img { /* "share it" button */
+	display: none;
+}
+
+.playemThumb > .playemCont {
+	display: table-cell;
+	width: 120px;
+	height: 90px;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.playemThumb > .playemCont > img {
+	max-width: 120px;
+	max-height: 90px;
+}
+
+.playemThumb > p {
+	text-align: center;
+	font-family: "Helvetica-Neue", Helvetica, Arial, Sans-serif;
+	font-size: 13px;
+	color: #525252;
+}
+
+.playemThumb:hover > .playemCont {
+	background: black;
+	opacity: 0.6;
+}
+
+.playemThumb:hover > img { /* "share it" button */
+	display: block;
+	position: absolute;
+	top: 35px;
+	width: 120px;
+}
+
