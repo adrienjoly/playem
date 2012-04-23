@@ -257,5 +257,5 @@
 		else initplayemBookmarklet();
 	})();
 	*/
-	include(urlPrefix + "/css/bookmarklet.css" + urlSuffix, initplayemBookmarklet);
+	include(urlPrefix + "/bookmarklet.css" + urlSuffix, initplayemBookmarklet);
 })();
