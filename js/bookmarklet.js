@@ -25,12 +25,15 @@
 	}
 	
 	// PARAMETERS
-	
+
+	var player = null;
+	var currentVideo = null;
+
 	var urlPrefix = findScriptHost("/js/bookmarklet.js") || "http://www.playem.org";
 	var urlSuffix = "?" + (new Date()).getTime();
-	var minH = 90;
-	var minW = 90;
-	var scClientId = "9d5bbaf9df494a4c23475d9fde1f69b4;"
+	//var scClientId = "9d5bbaf9df494a4c23475d9fde1f69b4";
+	var body = document.getElementsByTagName("body")[0];
+	body.className = (body.className || "") + " playemParent";
 	
 	var div = document.getElementById("playemBookmarklet");
 	if (!div) {
@@ -39,25 +42,26 @@
 	}
 	div.innerHTML = [
 		'<div id="playemHeader">',
-			'<a target="_blank" href="'+urlPrefix+'"><img src="'+urlPrefix+'/images/logo-s.png"></a>',
-			'<div onclick="document.body.removeChild(document.getElementById(\'playemBookmarklet\'))"><img src="'+urlPrefix+'/images/btn-close.png"></div>',
+			'<a target="_blank" href="'+urlPrefix+'"><img src="'+urlPrefix+'/favicon.png"><span>Play\'em</span></a>',
+			'<div onclick="document.body.removeChild(document.getElementById(\'playemBookmarklet\'))"><img src="'+urlPrefix+'/img/x.png"></div>',
 		'</div>',
+		'<div id="ytplayer"></div>',
 		'<div id="playemContent">',
 			'<div id="playemLoading">',
-				'<p>Extracting images and videos,</p>',
+				'<p>Extracting videos,</p>',
 				'<p>please wait...</p>',
-				'<img src="'+urlPrefix+'/images/loader.gif">',
+				'<img src="'+urlPrefix+'/img/loader.gif">',
 			'</div>',
 		'</div>'
 	].join('\n');
-	/*
+	
 	function log() {
 		try {
 			console.log.apply(console, arguments);
 		}
 		catch (e) {}
 	}
-	*/
+	
 	function include(src, callback) {
 		var ext = src.split(/[\#\?]/)[0].split(".").pop().toLowerCase();
 		var inc;
@@ -71,14 +75,14 @@
 				callback ();
 		}
 		else{
+			//log("loading js ", src)
 			inc = document.createElement("script");
+			inc.onload = inc.onreadystatechange = callback || function() {};
 			inc.src = src;
-			inc.onload = inc.onreadystatechange = callback || function() {
-			};
 		}
 		document.getElementsByTagName("head")[0].appendChild(inc);
 	};
-	
+	/*
 	function getSelText() {
 		var SelText = '';
 		if (window.getSelection) {
@@ -90,45 +94,52 @@
 		}
 		return SelText;
 	}
-	
-	function showForm(thumb) {
-		var text = getSelText();
-		var src = urlPrefix+'/bookmarkletForm?embed=' + encodeURIComponent(thumb.url)
-			+ '&refUrl=' + encodeURIComponent(window.location.href)
-			+ '&refTtl=' + encodeURIComponent(document.title)
-			+ (text ? '&text=' + encodeURIComponent(text) : '');
-		div.removeChild(contentDiv);
-		div.innerHTML += '<iframe id="playemContent" src="'+src+'"></iframe>';
+	*/
+	function playVideo(thumb) {
+		if (player)
+			player.loadVideoById(thumb.videoId);
+		else
+			player = new YT.Player('ytplayer', {
+				width: '300',
+				height: '200',
+				videoId: thumb.videoId, //'u1zgFlCw8Aw'
+				playerVars: {
+					autoplay: 1
+				},
+				events: {
+					onStateChange: function(event) {
+						if (event.data == YT.PlayerState.ENDED) {
+							playVideo(videoList[currentVideo.index+1]);
+						}
+					}
+				}
+			});
+		currentVideo = thumb;
 	}
 	
 	function renderThumb(thumb) {
-		var divThumb = document.createElement("div");
+		var divThumb = document.createElement("li");
 		divThumb.setAttribute("id", thumb.id);
-		divThumb.setAttribute("class", "playemThumb");
-		var divCont = document.createElement("div");
-		divCont.setAttribute("class", "playemCont");
-		divCont.appendChild(thumb.element);
-		var textNode = document.createTextNode(thumb.title);
-		var title = document.createElement("p");
-		title.appendChild(textNode);
-		divThumb.appendChild(divCont);
-		divThumb.appendChild(title);
-		var btnShareIt = document.createElement("img");
-		btnShareIt.setAttribute("src", urlPrefix + "/images/btn-shareit.png");
-		divThumb.appendChild(btnShareIt);
+		divThumb.appendChild(thumb.element);
+		divThumb.appendChild(document.createTextNode(thumb.title));
 		return divThumb;
 	}
 
 	var thumbCounter = 0;
+	var videoSet = {};
+	var videoList = [];
 	var contentDiv;
 
 	function addThumb(thumb) {
-		thumb.id = 'playemThumb' + (thumbCounter++);
+		//console.log(thumbCounter)
+		thumb.index = (thumbCounter++);
+		thumb.id = 'playemThumb' + thumb.index;
 		thumb.element = document.createElement("img");
 		thumb.element.src = thumb.img;
-		var divThumb = renderThumb(thumb);
-		divThumb.onclick = function() {showForm(thumb);};
-		contentDiv.appendChild(divThumb);
+		thumb.div = renderThumb(thumb);
+		thumb.div.onclick = function() {playVideo(thumb);};
+		contentDiv.appendChild(thumb.div);
+		return thumb;
 	}
 	
 	var pagePrefix = window.location.href.split(/[#\?]/).shift();
@@ -143,23 +154,6 @@
 			return path;
 	}
 
-	function detectImage(imgElement) {
-		var srcUrl = getUrl(imgElement.src);
-		if (!srcUrl || imgElement.width < minW || imgElement.height < minH)
-			return null;
-		var img = new Image();
-		img.onload = function() {
-			if (img.width > minW && img.height > minH)
-				addThumb({
-					url: srcUrl,
-					img: srcUrl,
-					title: "Image ("+img.width+"x"+img.height+")"
-				});
-		};
-		img.src = srcUrl;
-		return srcUrl;
-	}
-	
 	var prov = [
 		{
 			label: "Youtube video",
@@ -167,7 +161,7 @@
 			getImg: function(id, cb) {
 				cb("http://i.ytimg.com/vi/" + id + "/0.jpg");
 			}
-		},
+		}/*,
 		{
 			label: "Dailymotion video",
 			regex: /https?:\/\/(?:www\.)?dailymotion.com\/video\/([\w-_]+)/,
@@ -214,21 +208,26 @@
 				};
 				include('http://soundcloud.com/oembed?url='+url+'&format=js&iframe=true&callback=' + callbackFct);
 			}
-		}
+		}*/
 	];
 	
 	function addEmbedThumb(e, p) {
 		var found = false;
 		var matches;
-		var src = e.src || e.data;
-		if(found = (matches = p.regex.exec(src)))
-			p.getImg(matches.pop(), function(img){ //[1]
-				addThumb({
-					url: src,
-					img: img,
-					title: p.label
+		var src = e.src || e.data || e.href;
+		if(found = (matches = p.regex.exec(src))) {
+			var id = matches.pop();
+			if (!videoSet[id])
+				p.getImg(id, function(img){
+					videoList.push(videoSet[id] = addThumb({
+						videoId: id,
+						url: src,
+						img: img,
+						title: p.label
+					}));
+					//console.log("detected", id, e.tagName, videoSet[id]);
 				});
-			})
+		}
 		return found;
 	}
 
@@ -246,9 +245,13 @@
 		count += forEachElement("iframe", detectEmbed);
 		count += forEachElement("object", detectEmbed);
 		count += forEachElement("embed", detectEmbed);
-		count += forEachElement("img", detectImage);
+		count += forEachElement("a", detectEmbed);
 		document.getElementById("playemLoading").innerHTML = count ? ""
 			: "No images and videos were found on this page, sorry...";
+		log("end of video detection");
+		include("https://www.youtube.com/player_api", function() {
+			setTimeout(window.onYouTubePlayerAPIReady, 10);
+		});
 	}
 	/*
 	(function loadNext(){
@@ -257,5 +260,11 @@
 		else initplayemBookmarklet();
 	})();
 	*/
+
+	window.onYouTubePlayerReady = window.onYouTubePlayerAPIReady = function() {
+		log("youtube ready");
+		playVideo(videoList[0]);
+	}
+	
 	include(urlPrefix + "/bookmarklet.css" + urlSuffix, initplayemBookmarklet);
 })();

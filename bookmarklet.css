@@ -1,10 +1,15 @@
+body.playemParent {
+	position: absolute;
+	left: 200px;
+}
+
 #playemBookmarklet {
 	display: block;
 	position: fixed;
-	right: 10px;
-	top: 10px;
-	width: 550px;
-	height: 370px;
+	left: 0px;
+	top: 0px;
+	width: 200px;
+	height: 100%;
 	border: 1px solid #b7b7b7;
 	background: white;
 	z-index: 1000;
@@ -23,14 +28,8 @@
 	margin: 0;
 	padding:0;
 	height: 49px;
-	border-bottom : 2px solid #2469bb;
-	background: rgb(59, 159,  247);
-	background: -moz-linear-gradient(top,rgb(59, 159, 247) 0,rgb(59, 138, 209) 100%);
-	background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,rgb(59, 159, 247)),color-stop(100%,rgb(59, 138, 209)));
-	background: -webkit-linear-gradient(top,rgb(59, 159, 247) 0,rgb(59, 138, 209) 100%);
-	background: -o-linear-gradient(top,rgb(59, 159, 247) 0,rgb(59, 138, 209) 100%);
-	background: -ms-linear-gradient(top,rgb(59, 159, 247) 0,rgb(59, 138, 209) 100%);
-	background: linear-gradient(top,rgb(59, 159, 247) 0,rgb(59, 138, 209) 100%);
+	border-bottom : 2px solid #555;
+	background: #000;
 	-webkit-box-shadow: 0 1px 3px rgba(0, 32, 77,0.4);
 	-moz-box-shadow: 0 1px 3px rgba(0, 32, 77,0.4);
 	-ms-box-shadow: 0 1px 3px rgba(0, 32, 77,0.4);
@@ -44,6 +43,18 @@
 	left: 12px;
 }
 
+#playemHeader > a > img {
+	width: 32px;
+	height: 32px;
+	float: left;
+}
+
+#playemHeader > a > span {
+	float:left;
+	color: #fff;
+	margin: 5px;
+}
+
 #playemHeader > div {
 	position: absolute;
 	top: 12px;
@@ -53,9 +64,6 @@
 
 #playemContent {
 	border: none;
-	width: 550px;
-	height: 320px;
-	overflow: auto;
 }
 
 #playemLoading {
@@ -68,49 +76,26 @@
 
 /* extracted content */
 
-.playemThumb {
+#playemContent li {
 	position: relative;
 	padding: 6px;
-	width: 120px;
-	height: 120px;
-	float: left;
+	width: 240px;
+	height: 32px;
 	overflow:hidden;
 	cursor: pointer;
-}
-
-.playemThumb > img { /* "share it" button */
-	display: none;
-}
-
-.playemThumb > .playemCont {
-	display: table-cell;
-	width: 120px;
-	height: 90px;
-	vertical-align: middle;
-	text-align: center;
-}
-
-.playemThumb > .playemCont > img {
-	max-width: 120px;
-	max-height: 90px;
-}
-
-.playemThumb > p {
-	text-align: center;
 	font-family: "Helvetica-Neue", Helvetica, Arial, Sans-serif;
 	font-size: 13px;
 	color: #525252;
+	list-style: none;
 }
 
-.playemThumb:hover > .playemCont {
-	background: black;
+#playemContent li > img {
 	opacity: 0.6;
+	width: 32px;
+	float: left;
 }
 
-.playemThumb:hover > img { /* "share it" button */
-	display: block;
-	position: absolute;
-	top: 35px;
-	width: 120px;
+#playemContent li:hover > img {
+	opacity: 1;
 }
 
