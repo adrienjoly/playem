@@ -121,6 +121,7 @@ a:hover{
   overflow:hidden;
   vertical-align:top;
   padding:1px;
+  overflow-y: auto;
 }
 
 li {
