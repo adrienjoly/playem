@@ -100,11 +100,12 @@
 			player.loadVideoById(thumb.videoId);
 		else
 			player = new YT.Player('ytplayer', {
-				width: '300',
+				width: '200',
 				height: '200',
 				videoId: thumb.videoId, //'u1zgFlCw8Aw'
 				playerVars: {
-					autoplay: 1
+					autoplay: 1,
+					controls: 0
 				},
 				events: {
 					onStateChange: function(event) {
@@ -210,11 +211,22 @@
 			}
 		}*/
 	];
+
+	//var done = false;
 	
 	function addEmbedThumb(e, p) {
 		var found = false;
 		var matches;
-		var src = e.src || e.data || e.href;
+		var src = (e.dataset || {}).eid;//e.getAttribute("data-eid");
+		/*
+		if (e.onclick && (""+e.onclick).indexOf("replace") > -1 && !done) {
+			console.log();
+			for (var i in e)
+				console.log(i, e[i]);
+			done = true;
+		}
+		*/
+		src = src ? (""+src).replace("/yt/", "http://youtube.com/v/") : e.src || e.data || e.href;
 		if(found = (matches = p.regex.exec(src))) {
 			var id = matches.pop();
 			if (!videoSet[id])
