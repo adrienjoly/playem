@@ -35,9 +35,10 @@
   
     <div id="fb-root"></div>
     <script>
+    var inProd = window.location.href.indexOf("http://www.playem.org/") == 0;
 	window.fbAsyncInit = function() {
 		FB.init({
-			appId: "143116132424011", 
+			appId: inProd ? "143116132424011" : "222312447801944", 
 			status: true, 
 			cookie: true, 
 			xfbml: true,
@@ -67,13 +68,17 @@
 	<div id="welcome">
 		<p>Welcome to play'em, TV made by your friends!</p>
 		<p>Connect to your facebook account, to watch your friends' shared videos.</p> 
-		<p><a href="javascript:login()" id="fbconnect"><span>Connect with Facebook</span></a></p>
-                <p><small>NB: We don't store your personal data :-)</small></p>
+		<p>
+			<a href="javascript:login()" id="fbconnect"><span>Connect with Facebook</span></a>
+			<input type="checkbox" id="chkGroups"><small style="color:#999"> Also play videos from your groups (optional)</small>
+		</p>
+        <p><small>NB: We don't store your personal data :-)</small></p>
 	</div>
 	
 	<div id="container" style="display:none;">
 		<div id="player">
 			<ul id="playlist"></ul>
+			<select id="selGroup"></select>
 			<div id="videoEmbed"></div>
 			<div id="socialPane"></div>
 		</div>

@@ -8,10 +8,14 @@ $(function() {
 	var //user = null,
 	current = null,
 	vids = [],
-	feedOffset = 0,
 	playlist = $("#playlist"),
 	youtubeRegex = ///^http[s]?\:\/\/(www\.)?youtu(\.)?be(\.com)?\/(watch\?v=)?(v\/)?([a-zA-Z0-9_\-]+)/;
 			/(https?\:\/\/(www\.)?youtu(\.)?be(\.com)?\/.*(\?v=|\/v\/)([a-zA-Z0-9_\-]+).*)/g;
+
+	var chkGroups = false;
+	var feedUri = '/me/home';
+	var isLoading = false;
+	var onNextLoadPage = null;
 
 	// for swf object
 	var flashvars = {
@@ -94,12 +98,10 @@ $(function() {
 		);
 	};
 	
-	var loadMore = function(until) {
-		console.log("loadMore", feedOffset, until);
-		var params = until ? {
-			until:until
-		} : {};
-		FB.api('/me/home', params, function(feed) {
+	var loadMore = function(feedUrl) {
+		isLoading = true;
+		console.log("loadMore", feedUrl || feedUri);
+		FB.api(feedUrl || feedUri, {}, function(feed) {
 			for (var i in feed.data) {
 				/*console.log*/(i = feed.data[i]);
 				if (i.type=="video" && i.link)
@@ -108,12 +110,51 @@ $(function() {
 			if (!current && vids.length > 0)
 				playVid(vids[0]);
         
-			feedOffset += feed.data.length;
-			if (feed.data.length > 0 /*&& vids.length < 10 && feedOffset < 200*/)
-				loadMore(feed.paging.next.substr(feed.paging.next.lastIndexOf("=")+1));
+			if (onNextLoadPage) {
+				onNextLoadPage();
+				onNextLoadPage = null;
+				return;
+			}
+
+			if (feed.data.length > 0 && feed.paging)
+				loadMore(feed.paging.next);
+			else
+				isLoading = false;
 		});
 	};
-  
+
+	function loadGroups(groupHandler) {
+		FB.api('/me/groups', {}, function(groups) {
+			//console.log("groups", groups);
+			if (groups && groups.data)
+				for (var i in groups.data)
+					groupHandler(groups.data[i]);
+		});
+	}
+
+	function initGroups() {
+		var $selGroup = $("#selGroup").show();
+		$selGroup.append(new Option("(personal newsfeed)", "/me/home", true, true));
+		$selGroup.change(function(){
+			var groupId = $selGroup.val();
+			console.log("switching to group: ", groupId);
+			function loadGroupFeed() {
+				playlist.html("");
+				vids = [];
+				feedUri = groupId; //'/'+groupId+'/feed';
+				current = null;
+				loadMore();
+			};
+			if (isLoading)
+				onNextLoadPage = loadGroupFeed;
+			else
+				loadGroupFeed();
+		});
+		loadGroups(function(g){
+			$selGroup.append(new Option(g.name, "/" + g.id + "/feed" /*, true, true*/));
+		});
+	}
+
 	// called when the user clicks the facebook connect button
 
 	var onFacebookSessionEvent = function(response) {
@@ -121,6 +162,8 @@ $(function() {
 		if (response.session || response.authResponse) {
 			$("#welcome").hide();
 			$("#container").show();
+			if (chkGroups)
+				initGroups();
 			loadMore();
 		}
 		else {
@@ -135,8 +178,9 @@ $(function() {
 			window.location.href = nextPage;
 		} : onFacebookSessionEvent;
 		console.log("FB.login...");
+		chkGroups = document.getElementById("chkGroups").checked;
 		FB.login(handler, {
-			scope:'read_stream'  // oauth 2.0
+			scope: 'read_stream' + chkGroups ? ',user_groups' : ''  // manage_pages
 		});
 	};
 

@@ -133,6 +133,14 @@ li:hover {
   color:white;  
 }
 
+#selGroup {
+	display: none;
+	position: absolute;
+	top: -25px;
+	left: 0px;
+	width: 200px;
+}
+
 #videoEmbed {
   position:relative;
   display:inline-block;
