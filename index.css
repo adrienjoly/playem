@@ -141,6 +141,27 @@ li:hover {
 	width: 200px;
 }
 
+#btnNext {
+	display: none;
+	cursor: pointer;
+	position: absolute;
+	top: 120px;
+	left: 760px;
+	background: url("/img/next.png");
+	width: 100px;
+	height: 100px;
+	opacity: 0.9;
+}
+
+#btnNext:hover {
+	opacity: 1.0;
+}
+
+#btnNext:active {
+	top: 122px;
+	opacity: 0.7;
+}
+
 #videoEmbed {
   position:relative;
   display:inline-block;

@@ -64,8 +64,9 @@ $(function() {
 		window.playNext = function() {
 			playVid(current = vids[vid.i+1 % vids.length]);
 		};  
+		$("#btnNext").show().unbind().click(window.playNext);
 	};
-	
+
 	window.onytplayerStateChange = function (newState) {
 		if (newState == 0) // end of video
 			playNext();
