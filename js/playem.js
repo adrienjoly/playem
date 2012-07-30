@@ -104,9 +104,10 @@ $(function() {
 		console.log("loadMore", feedUrl || feedUri);
 		FB.api(feedUrl || feedUri, {}, function(feed) {
 			for (var i in feed.data) {
-				/*console.log*/(i = feed.data[i]);
-				if (i.type=="video" && i.link)
-					addVid(i);
+				var v = feed.data[i];
+				//console.log(v);
+				if (v && v.type=="video" && v.link)
+					addVid(v);
 			}
 			if (!current && vids.length > 0)
 				playVid(vids[0]);
@@ -117,10 +118,12 @@ $(function() {
 				return;
 			}
 
-			if (feed.data.length > 0 && feed.paging)
+			if (feed.data && feed.data.length > 0 && feed.paging)
 				loadMore(feed.paging.next);
-			else
+			else {
+				console.log("last feed content", feed);
 				isLoading = false;
+			}
 		});
 	};
 
