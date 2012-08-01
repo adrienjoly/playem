@@ -163,19 +163,23 @@ li:hover {
 }
 
 #videoEmbed {
-  position:relative;
-  display:inline-block;
+  position:absolute;
+  /*display:inline-block;*/
   border:1px solid #444;
   width:530px;
   height:360px;
   padding:1px;
-  overflow:hidden;
+  /*overflow:hidden;*/
+  top: 1px;
+  left: 208px;
+  background: black;
 }
 
 #socialPane {
   position:absolute;
   border:1px solid #444;
-  right:1px;
+  top: 368px;
+  left: 208px;
   width:530px;
   height:130px;
   padding:1px;
