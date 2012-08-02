@@ -213,6 +213,16 @@
 	];
 
 	//var done = false;
+
+	function unwrapFacebookLink(src) {
+		// e.g. http://www.facebook.com/l.php?u=http%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DKhXn0anD1lE&h=AAQFjMJBoAQFTPOP4HzFCv0agQUHB6Un31ArdmwvxzZxofA
+		var fbLink = src.split("facebook.com/l.php?u=");
+		if (fbLink.length) {
+			fbLink = fbLink.pop().split("&").shift();
+			src = decodeURIComponent(fbLink);
+			//console.log(src);
+		}
+	}
 	
 	function addEmbedThumb(e, p) {
 		var found = false;
@@ -227,6 +237,9 @@
 		}
 		*/
 		src = src ? (""+src).replace("/yt/", "http://youtube.com/v/") : e.src || e.data || e.href;
+
+		unwrapFacebookLink(src);
+
 		if(found = (matches = p.regex.exec(src))) {
 			var id = matches.pop();
 			if (!videoSet[id])
