@@ -222,6 +222,7 @@
 			src = decodeURIComponent(fbLink);
 			//console.log(src);
 		}
+		return src;
 	}
 	
 	function addEmbedThumb(e, p) {
@@ -238,11 +239,11 @@
 		*/
 		src = src ? (""+src).replace("/yt/", "http://youtube.com/v/") : e.src || e.data || e.href;
 
-		unwrapFacebookLink(src);
+		src = unwrapFacebookLink(src);
 
 		if(found = (matches = p.regex.exec(src))) {
 			var id = matches.pop();
-			if (!videoSet[id])
+			if (id && !videoSet[id])
 				p.getImg(id, function(img){
 					videoList.push(videoSet[id] = addThumb({
 						videoId: id,
