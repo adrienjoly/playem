@@ -237,7 +237,7 @@
 			done = true;
 		}
 		*/
-		src = src ? (""+src).replace("/yt/", "http://youtube.com/v/") : e.src || e.data || e.href;
+		src = src ? (""+src).replace("/yt/", "http://youtube.com/v/") : e.src || e.data || e.href || "";
 
 		src = unwrapFacebookLink(src);
 
