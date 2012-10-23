@@ -9,8 +9,9 @@ $(function() {
 	current = null,
 	vids = [],
 	playlist = $("#playlist"),
-	youtubeRegex = ///^http[s]?\:\/\/(www\.)?youtu(\.)?be(\.com)?\/(watch\?v=)?(v\/)?([a-zA-Z0-9_\-]+)/;
-			/(https?\:\/\/(www\.)?youtu(\.)?be(\.com)?\/.*(\?v=|\/v\/)([a-zA-Z0-9_\-]+).*)/g;
+	youtubeRegex = // /^http[s]?\:\/\/(www\.)?youtu(\.)?be(\.com)?\/(watch\?v=)?(v\/)?([a-zA-Z0-9_\-]+)/;
+				   // /(https?\:\/\/(www\.)?youtu(\.)?be(\.com)?\/.*(\?v=|\/v\/)([a-zA-Z0-9_\-]+).*)/g;
+				   /(youtube\.com\/(v\/|embed\/|(?:.*)?[\?\&]v=)|youtu\.be\/)([a-zA-Z0-9_\-]+)/;
 
 	var chkGroups = false;
 	var feedUri = '/me/home';
@@ -29,10 +30,8 @@ $(function() {
 	};
   
 	var addVid = function (fbItem) {
-		var vidUrl = fbItem.link;
-		var vid = youtubeRegex.exec(vidUrl); //vidUrl.match(youtubeRegex);
-		if (vid && vid.length > 0) {
-			vid = vid.pop();
+		var vid = (fbItem.link.match(youtubeRegex) || []).pop(); // youtubeRegex.exec(fbItem.link);
+		if (vid) {
 			vid = {
 				i:vids.length, 
 				id:vid, 
