@@ -100,7 +100,7 @@ $(function() {
 	
 	var loadMore = function(feedUrl) {
 		isLoading = true;
-		console.log("loadMore", feedUrl || feedUri);
+		console.log("loadMore..." /*, feedUrl || feedUri*/);
 		FB.api(feedUrl || feedUri, {}, function(feed) {
 			for (var i in feed.data) {
 				var v = feed.data[i];
