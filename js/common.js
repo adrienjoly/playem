@@ -43,15 +43,12 @@ olark.identify('6373-737-10-6529');
 function loadCss(path, cb){
 	$.get(path, function(response){
 		$('<style></style>').text(response).appendTo('head');
-		cb();
+		cb && cb();
 	});
 }
 
 function loadJS(path, cb){
-	$.get(path, function(response){
-		$('<script></script>').text(response).appendTo('body');
-		cb();
-	});
+	$.getScript(path, cb);
 }
 
 function WhenDone(cb){
@@ -70,6 +67,108 @@ function keepLettersOnly(str) {
 	return (""+str).replace(/[^\w]/g, "");
 }
 
+// main classes
+
+function Tracklist(ytPlayer){
+	return {
+		onTrackPlaying: null,
+		current: null,
+		vids: [],
+		clear: function(){
+			this.vids = [];
+			this.current = null;
+		},
+		addTrack: function(fbItem){
+			var track = null, embedId = ytPlayer.detect(fbItem.link);
+			if (embedId) {
+				track = {
+					i: this.vids.length,
+					eId: embedId, // id
+					//url: embedId,
+					name: fbItem.name,
+					desc: fbItem.description,
+					from: fbItem.from,
+					time: fbItem.updated_time,
+					msg: fbItem.message,
+					fbUrl: fbItem.actions[0].link
+				};
+				this.vids.push(track);
+			}
+			return track;
+		},
+		play: function(index){
+			var self = this;
+			console.log("play", index || 0, this.vids[index || 0]);
+			this.current = this.vids[index || 0];
+			ytPlayer.play(this.current.eId);
+			ytPlayer.onEnd = function() {
+				console.log("onEnd");
+				self.next();
+			};
+			this.onTrackPlaying(this.current);
+		},
+		next: function(){
+			this.play(this.current.i+1 % this.vids.length);
+		}
+	};
+}
+
+function FacebookImporter(){
+	var self = this;
+	var isLoading = false;
+	var feedUri = '/me/home';
+	var onNextLoadPage = null;
+	this.onNewVid = null;
+
+	this.loadMore = function(feedUrl) {
+		var self = this;
+		isLoading = true;
+		console.log("loadMore..." /*, feedUrl || feedUri*/);
+		FB.api(feedUrl || feedUri, {}, function(feed) {
+			for (var i in feed.data) {
+				var v = feed.data[i];
+				//console.log(v);
+				if (v && v.type=="video" && v.link) {
+					self.onNewVid(v);
+				}
+			}
+			if (onNextLoadPage) {
+				onNextLoadPage();
+				onNextLoadPage = null;
+				return;
+			}
+
+			if (feed.data && feed.data.length > 0 && feed.paging)
+				self.loadMore(feed.paging.next);
+			else {
+				console.log("last feed content", feed);
+				isLoading = false;
+			}
+		});
+	};
+
+	this.loadGroups = function(groupHandler) {
+		FB.api('/me/groups', {}, function(groups) {
+			//console.log("groups", groups);
+			if (groups && groups.data)
+				for (var i in groups.data)
+					groupHandler(groups.data[i]);
+		});
+	}
+
+	this.switchToGroup = function(groupId, cb){
+		function loadGroupFeed(){
+			cb();
+			feedUri = groupId; //'/'+groupId+'/feed';
+			self.loadMore();
+		}
+		if (isLoading)
+			onNextLoadPage = loadGroupFeed;
+		else
+			loadGroupFeed();
+	}
+}
+
 // init
 
 function initPlayemUI(uiDir){
@@ -82,6 +181,12 @@ function initPlayemUI(uiDir){
 	loadJS(uiDir+"/ui.js", makeCallback());
 }
 
+function initPlayer(){
+	loadJS("/js/old/YoutubePlayer.js", function(){
+		loadJS("/js/playem.js");
+	});
+}
+
 var DEFAULTS = {
 	design: "default"
 };
@@ -91,6 +196,7 @@ var DEFAULTS = {
 		if (!p.hasOwnProperty(i))
 			p[i] = DEFAULTS[i];
 	initPlayemUI("/ui-" + keepLettersOnly(p.design));
+	initPlayer();
 })((function readHashParams(){
 	var params = {}, strings = window.location.href.split(/[#&]+/).slice(1);
 	for (var i in strings) {
