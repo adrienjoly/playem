@@ -43,14 +43,14 @@
 	div.innerHTML = [
 		'<div id="playemHeader">',
 			'<a target="_blank" href="'+urlPrefix+'"><img src="'+urlPrefix+'/favicon.png"><span>Play\'em</span></a>',
-			'<div onclick="document.body.removeChild(document.getElementById(\'playemBookmarklet\'))"><img src="'+urlPrefix+'/img/x.png"></div>',
+			'<div onclick="document.body.removeChild(document.getElementById(\'playemBookmarklet\'))"><img src="'+urlPrefix+'/ui-default/img/x.png"></div>',
 		'</div>',
 		'<div id="ytplayer"></div>',
 		'<div id="playemContent">',
 			'<div id="playemLoading">',
 				'<p>Extracting videos,</p>',
 				'<p>please wait...</p>',
-				'<img src="'+urlPrefix+'/img/loader.gif">',
+				'<img src="'+urlPrefix+'/ui-default/img/loader.gif">',
 			'</div>',
 		'</div>'
 	].join('\n');

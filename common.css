@@ -1,0 +1,39 @@
+#welcome,
+#container {
+	display: none;
+}
+
+body.init > * {
+	display: none;
+}
+
+body.init {
+	width: 100%;
+	height: 100%;
+	background: black url(/ui-englar/img/fond.jpg) no-repeat fixed 50% 50%;
+	background-size: cover;
+}
+
+body.init > #loader,
+body.loading > #loader {
+	display: block;
+	top: 50%;
+	left: 50%;
+}
+
+#loader {
+	position: fixed;
+	top: -100px;
+	left: -100px;
+	width: 16px;
+	height: 16px;
+	background-image: url(/ui-default/img/loading.gif);
+}
+
+body.welcome > #welcome {
+	display: block;
+}
+
+body.main > #container {
+	display: block;
+}
