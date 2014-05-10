@@ -53,7 +53,9 @@ function loadJS(path, cb){
 
 function WhenDone(cb){
 	var remaining = 0;
-	function providedCallback(){
+	function providedCallback(cb2){
+		if (typeof cb2 == "function")
+			cb2();
 		if (!--remaining)
 			cb();
 	}
@@ -65,6 +67,15 @@ function WhenDone(cb){
 
 function keepLettersOnly(str) {
 	return (""+str).replace(/[^\w]/g, "");
+}
+
+function parseHashParams(){
+	var params = {}, strings = window.location.href.split(/[#&]+/).slice(1);
+	for (var i in strings) {
+		var splitted = strings[i].split("=");
+		params[decodeURIComponent(splitted[0])] = typeof(splitted[1]) == "string" ? decodeURIComponent(splitted[1]) : null;
+	}
+	return params;
 }
 
 // main classes
@@ -85,6 +96,7 @@ function Tracklist(ytPlayer){
 					i: this.vids.length,
 					eId: embedId, // id
 					//url: embedId,
+					url: fbItem.link,
 					name: fbItem.name,
 					desc: fbItem.description,
 					from: fbItem.from,
@@ -169,39 +181,130 @@ function FacebookImporter(){
 	}
 }
 
+function PlayemApp(){
+	var $body = $("body");
+	var playlist = $("#playlist");
+
+	var tracklist = new Tracklist(ytPlayer);
+	var fbImporter = new FacebookImporter();
+
+	fbImporter.onNewVid = function(fbItem) {
+		var vid = tracklist.addTrack(fbItem);
+		if (vid) {
+			vid.li = $("<li>"+vid.name+"</li>").click(function() {
+				tracklist.play(vid.i);
+			}).appendTo(playlist);
+			if (!tracklist.current)
+				tracklist.play();
+		}
+	};
+
+	tracklist.onTrackPlaying = function(vid) {
+		$("li").css('color', 'gray');
+		$("#playCursor").remove();
+		vid.li.css('color', 'white').prepend("<span id='playCursor'>► </span>");
+		$("#socialPane").html('<p>Shared by:</p><img src="http://graph.facebook.com/' + vid.from.id + '/picture"/>'
+			+ '<p>' + vid.from.name + (vid.msg ? ": " + vid.msg : "") + '</p>'
+			+ '<p class="timestamp"><a href="'+vid.fbUrl+'" title="comment on facebook">' +vid.time + '</a></p>'
+			+ '<span class="postShareFB">&nbsp;</span>');
+		$(".postShareFB").click(function() {
+			var vid = tracklist.current;
+			FB.ui({
+				method: 'feed',
+				name: vid.name,
+				link: vid.url,
+				message: "This video was originally shared by " + vid.from.name + ".",
+				caption: "This video was originally shared by " + vid.from.name + ".",
+				description: "Watch your friends' videos in one click, using Play'em. No browsing required, it's just like TV!",
+				actions:  {name:'Watch Play\'em TV', link:'http://playem.org/'}
+			});
+		});
+		$("#btnNext").show().unbind().click(function(){
+			tracklist.next();
+		});
+	};
+
+	function initGroups() {
+		var $selGroup = $("#selGroup").show();
+		$selGroup.append(new Option("(personal newsfeed)", "/me/home", true, true));
+		$selGroup.change(function(){
+			var groupId = $selGroup.val();
+			console.log("switching to group: ", groupId);
+			fbImporter.switchToGroup(groupId, function(){
+				playlist.html("");
+				tracklist.clear();
+			});
+		});
+		fbImporter.loadGroups(function(g){
+			$selGroup.append(new Option(g.name, "/" + g.id + "/feed" /*, true, true*/));
+		});
+	}
+
+	return self = {
+		setMode:function (mode){
+			$body[0].className = mode; //["init", "welcome", "main"][mode];
+			if (mode == "main")
+				fbImporter.loadMore();
+		},
+		logout: function(){
+			//user = null;
+			this.setMode("welcome");
+		},
+		initGroups: initGroups
+	};
+}
+
 // init
 
-function initPlayemUI(uiDir){
+function initPlayemUI(uiDir, cb){
 	var uiDir = uiDir || "/ui-default";
-	var makeCallback = new WhenDone(function(){
-		$("body")[0].className = "welcome";
-	});
+	var makeCallback = new WhenDone(cb);
 	initFB(makeCallback());
 	loadCss(uiDir+"/styles.css", makeCallback());
 	loadJS(uiDir+"/ui.js", makeCallback());
 }
 
-function initPlayer(){
+function initPlayer(cb){
 	loadJS("/js/old/YoutubePlayer.js", function(){
-		loadJS("/js/playem.js");
+		window.ytPlayer = new YoutubePlayer('videoEmbed');
+		cb();
 	});
 }
 
-var DEFAULTS = {
-	design: "default"
-};
-
 (function init(p){
+	var DEFAULTS = {
+		design: "default"
+	};
 	for (var i in DEFAULTS)
 		if (!p.hasOwnProperty(i))
 			p[i] = DEFAULTS[i];
-	initPlayemUI("/ui-" + keepLettersOnly(p.design));
-	initPlayer();
-})((function readHashParams(){
-	var params = {}, strings = window.location.href.split(/[#&]+/).slice(1);
-	for (var i in strings) {
-		var splitted = strings[i].split("=");
-		params[decodeURIComponent(splitted[0])] = typeof(splitted[1]) == "string" ? decodeURIComponent(splitted[1]) : null;
-	}
-	return params;
-})());
+
+	var makeCallback = new WhenDone(function(){
+		var playemApp = new PlayemApp();
+		playemApp.setMode("welcome");
+		$("#fbconnect").click(function(e) {
+			e.preventDefault();
+			var chkGroups = document.getElementById("chkGroups").checked;
+			function onFacebookSessionEvent(response) {
+				if (response.session || response.authResponse) {
+					playemApp.setMode("main");
+					if (chkGroups)
+						playemApp.initGroups();
+				}
+				else
+					playemApp.logout();
+			}
+			FB.login(onFacebookSessionEvent, { scope: 'read_stream' + chkGroups ? ',user_groups' : '' }); // manage_pages	
+		});
+		if (p.autoplay || window.startOnLoad) {
+			playemApp.setMode("main");
+		}
+	});
+
+	initPlayemUI("/ui-" + keepLettersOnly(p.design), makeCallback(/*function(){
+		playemApp.setMode("welcome");
+	}*/));
+
+	initPlayer(makeCallback());
+
+})(parseHashParams());
