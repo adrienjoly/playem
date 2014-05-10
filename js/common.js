@@ -1,5 +1,10 @@
 var inProd = window.location.href.indexOf("http://www.playem.org/") == 0;
 
+if (undefined == window.console)
+	console = { log:function(){} };
+
+console.log("playem init...");
+
 // facebook
 function initFB(cb) {
 	window.fbAsyncInit = function() {
