@@ -14,6 +14,16 @@ html, body {
 	color:white;
 }
 
+#socialButtons {
+	position: absolute;
+	top:3px;
+	right:3px
+}
+
+#txtWelcome {
+	display: none;
+}
+
 .back {
   position:absolute;
 	top:-20px;
@@ -142,14 +152,17 @@ li:hover {
 }
 
 #btnNext {
-	display: none;
+	display: block;
 	cursor: pointer;
 	position: absolute;
 	top: 120px;
 	left: 760px;
 	background: url("/ui-default/img/next.png");
-	width: 100px;
-	height: 100px;
+	width: 0;
+	height: 0;
+	overflow: hidden;
+	padding-left: 100px;
+	padding-top: 100px;
 	opacity: 0.9;
 }
 

@@ -1,11 +1,71 @@
-body{
-	background: url(img-englar/fond-ramp.jpg) top left no-repeat, url(img-englar/fond.jpg) top left;
+body {
+	background: url(/ui-englar/img/fond-ramp.jpg) top left no-repeat, url(/ui-englar/img/fond.jpg) top left;
+	font-family: Verdana;
 }
 
+#logo {
+	background-image: url(/ui-englar/img/playem-logo-login.png) ;
+	width: 0;
+	height: 0;
+	padding-top: 133px;
+	padding-left: 394px;
+}
+
+#txtNota {
+	display: none;
+}
+
+#welcome p {
+	margin: 20px 0;
+}
+
+/* duplicated from default ui */
+
+a {
+	color: inherit;
+	text-decoration: none;
+	border:none;
+}
+
+a:hover{
+	color: white;
+	text-decoration: underline;
+}
+
+#socialButtons {
+	position: absolute;
+	top:3px;
+	right:3px
+}
+
+#fbconnect {
+	display: block;
+	margin: 0 auto;
+	margin-top: 20px;
+	background: url("/ui-default/img/facebook_connect_large.png");
+	width: 300px;
+	height: 40px;
+	opacity:0.8;
+    outline:none;
+    transition: all 0.04s ease-in-out;
+    -webkit-transition: all 0.04s ease-in-out;
+    -moz-transition: all 0.04s ease-in-out;
+}
+
+#fbconnect:hover {
+	opacity:1.0;
+    box-shadow: 0 0 5px rgba(0, 0, 255, 1);
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 255, 1);
+    -moz-box-shadow: 0 0 5px rgba(0, 0, 255, 1);
+}
+
+#fbconnect > span {
+	display: none;
+}
 
 /* LOGIN PAGE */
 
-#login-box{	
+#welcome {
 	text-align: center;
 	width: 400px;
 	height: 300px;
@@ -14,16 +74,14 @@ body{
 	margin-top: -150px;
 	left:50%;
 	margin-left: -200px;
-	
-	font-family: Verdana;
 	font-size: 12px;
 	color: white;
 	text-shadow: 0px 1px 0px #000;
 }
 
-/* HOME PAGE */
+/* MAIN PAGE */
 
-#player-box{	
+#container {
 	text-align: center;
 	width: 800px;
 	height: 400px;
@@ -31,28 +89,53 @@ body{
 	margin-left: auto;
 	margin-right: auto;
 	
-	font-family: Verdana;
 	font-size: 12px;
 	color: white;
 	text-shadow: 0px 1px 0px #000;
 }
 
+#player {
+	position: relative;
+}
+
+#selGroup {
+	display: block;
+	margin: 5px auto;
+}
+
+#socialPane,
+#playlist {
+	display: none;
+}
+
+#btnNext {
+	cursor: pointer;
+	position: absolute;
+	top: 180px;
+	left: 660px;
+	background: url(/ui-englar/img/next.png);
+	width:0;
+	height:0;
+	padding-left: 85px;
+	padding-top: 18px;
+	overflow: hidden;
+}
+
 /* COPYRIGHT */
 
-#copyright{
+#footer{
 	position: absolute;
 	bottom: 10px;
 	right: 10px;
-	font-family: Verdana;
 	font-size: 10px;
 	color: #697389;
 	text-shadow: 0px 1px 0px #000;
 }
-#copyright a, #copyright a:link, #copyright a:visited{
+#footer a, #footer a:link, #footer a:visited{
 	color: #7d89a3;
 	text-decoration: none;
 }
-#copyright a:hover{
+#footer a:hover{
 	color: #ffffff;
 	text-decoration: none;
 }
