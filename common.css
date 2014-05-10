@@ -37,3 +37,8 @@ body.welcome > #welcome {
 body.main > #container {
 	display: block;
 }
+
+#videoEmbed {
+	width: 425px;
+	height: 344px;
+}

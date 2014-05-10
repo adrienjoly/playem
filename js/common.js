@@ -181,11 +181,10 @@ function FacebookImporter(){
 	}
 }
 
-function PlayemApp(){
+function PlayemApp(tracklist){
 	var $body = $("body");
 	var playlist = $("#playlist");
 
-	var tracklist = new Tracklist(ytPlayer);
 	var fbImporter = new FacebookImporter();
 
 	fbImporter.onNewVid = function(fbItem) {
@@ -269,6 +268,25 @@ function initPlayer(cb){
 		window.ytPlayer = new YoutubePlayer('videoEmbed');
 		cb();
 	});
+	return;
+	loadJS("/js/playemWrapper.js", function(){
+		loadSoundManager(function(){
+			initPlayem(document.getElementById("videoEmbed"), "videoPlayer", function(playem){
+				console.info("playemjs is ready!");
+				window.playemWrapper = new PlayemWrapper(playem);
+				cb();
+				/*
+				forEachElement("li", function(element) {
+					var wtn = element.getAttribute("data-wtn"); // whyd track number
+					if (wtn !== null)
+						element.onclick = function(){
+							playem.play(wtn);
+						};
+				});
+				*/
+			});
+		});
+	});
 }
 
 (function init(p){
@@ -280,7 +298,8 @@ function initPlayer(cb){
 			p[i] = DEFAULTS[i];
 
 	var makeCallback = new WhenDone(function(){
-		var playemApp = new PlayemApp();
+		var tracklist = window.ytPlayer ? new Tracklist(ytPlayer) : playemWrapper;
+		var playemApp = new PlayemApp(tracklist);
 		playemApp.setMode("welcome");
 		$("#fbconnect").click(function(e) {
 			e.preventDefault();
