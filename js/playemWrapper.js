@@ -1,7 +1,5 @@
-window.SOUNDCLOUD_CLIENT_ID = "9d5bbaf9df494a4c23475d9fde1f69b4";
+window.SOUNDCLOUD_CLIENT_ID = "496ce54cc74f2e4ba1945ada07cd1c56";
 window.DEBUG = false; // for soundmanager
-//window.DEEZER_APP_ID = 125765;
-//window.DEEZER_CHANNEL_URL = window.location.href.substr(0, window.location.href.indexOf("/", 10)) + "/channel.html";
 
 // components
 
@@ -19,8 +17,8 @@ function initPlayem(playerContainer, playerId, cb) {
 		PLAYER_PARAMS = {
 			playerId: playerId,
 			origin: window.location.host || window.location.hostname,
-			width: playerContainer.clientWidth,
-			height: playerContainer.clientHeight,
+			width: $(playerContainer).width(),
+			height: $(playerContainer).height(),
 			playerContainer: playerContainer
 		};
 	loadJS("/js/playem-min.js", function(){
@@ -62,19 +60,23 @@ function getTrackUrl(eId){
 }
 
 function PlayemWrapper(playem){
+	var self;
 	playem.on("onTrackChange", function(track){
+		self.current = track.metadata;
 		self.onTrackPlaying(track.metadata);
 	});
 	return self = {
 		onTrackPlaying: null,
+		current: null,
+		vids: playem.getQueue(),
 		clear: function(){
 			playem.clearQueue();
 		},
 		addTrack: function(fbItem){
-			return playem.addTrackByUrl(fbItem.link, {
-				i: this.vids.length,
-				eId: embedId, // id
-				//url: embedId,
+			console.log(fbItem.link);
+			var metadata = {
+				i: playem.getQueue().length,
+				//eId: embedId,
 				url: fbItem.link,
 				name: fbItem.name,
 				desc: fbItem.description,
@@ -82,7 +84,11 @@ function PlayemWrapper(playem){
 				time: fbItem.updated_time,
 				msg: fbItem.message,
 				fbUrl: fbItem.actions[0].link
-			});
+			}
+			try {
+				playem.addTrackByUrl(fbItem.link, metadata);
+				return metadata
+			} catch(e) {};
 		},
 		play: function(index){
 			var self = this;

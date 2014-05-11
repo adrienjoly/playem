@@ -53,15 +53,17 @@ function loadJS(path, cb){
 
 function WhenDone(cb){
 	var remaining = 0;
-	function providedCallback(cb2){
-		if (typeof cb2 == "function")
-			cb2();
-		if (!--remaining)
-			cb();
+	function provideCallback(cb2){
+		return function(){
+			if (typeof cb2 == "function")
+				cb2.apply(null, arguments);
+			if (!--remaining)
+				cb();
+		}
 	}
-	return function(){
+	return function(cb2){
 		++remaining;
-		return providedCallback;
+		return provideCallback(cb2);
 	}
 };
 
@@ -255,40 +257,6 @@ function PlayemApp(tracklist){
 
 // init
 
-function initPlayemUI(uiDir, cb){
-	var uiDir = uiDir || "/ui-default";
-	var makeCallback = new WhenDone(cb);
-	initFB(makeCallback());
-	loadCss(uiDir+"/styles.css", makeCallback());
-	loadJS(uiDir+"/ui.js", makeCallback());
-}
-
-function initPlayer(cb){
-	loadJS("/js/old/YoutubePlayer.js", function(){
-		window.ytPlayer = new YoutubePlayer('videoEmbed');
-		cb();
-	});
-	return;
-	loadJS("/js/playemWrapper.js", function(){
-		loadSoundManager(function(){
-			initPlayem(document.getElementById("videoEmbed"), "videoPlayer", function(playem){
-				console.info("playemjs is ready!");
-				window.playemWrapper = new PlayemWrapper(playem);
-				cb();
-				/*
-				forEachElement("li", function(element) {
-					var wtn = element.getAttribute("data-wtn"); // whyd track number
-					if (wtn !== null)
-						element.onclick = function(){
-							playem.play(wtn);
-						};
-				});
-				*/
-			});
-		});
-	});
-}
-
 (function init(p){
 	var DEFAULTS = {
 		design: "default"
@@ -297,9 +265,9 @@ function initPlayer(cb){
 		if (!p.hasOwnProperty(i))
 			p[i] = DEFAULTS[i];
 
+	var playemApp = null;
+
 	var makeCallback = new WhenDone(function(){
-		var tracklist = window.ytPlayer ? new Tracklist(ytPlayer) : playemWrapper;
-		var playemApp = new PlayemApp(tracklist);
 		playemApp.setMode("welcome");
 		$("#fbconnect").click(function(e) {
 			e.preventDefault();
@@ -320,10 +288,28 @@ function initPlayer(cb){
 		}
 	});
 
-	initPlayemUI("/ui-" + keepLettersOnly(p.design), makeCallback(/*function(){
-		playemApp.setMode("welcome");
-	}*/));
+	(function initPlayemUI(uiDir, cb){
+		var uiDir = uiDir || "/ui-default";
+		var makeCallback = new WhenDone(cb);
+		initFB(makeCallback());
+		loadCss(uiDir+"/styles.css", makeCallback());
+		loadJS(uiDir+"/ui.js", makeCallback());
+	})("/ui-" + keepLettersOnly(p.design), makeCallback());
 
-	initPlayer(makeCallback());
+	(function initPlayer(videoContainer, cb){
+		if (p.player == "all")
+			loadJS("/js/playemWrapper.js", function(){
+				loadSoundManager(function(){
+					initPlayem(document.getElementById(videoContainer), "videoPlayer", function(playem){
+						cb(playemApp = new PlayemApp(new PlayemWrapper(playem)));
+					});
+				});
+			});
+		else
+			loadJS("/js/old/YoutubePlayer.js", function(){
+				var tracklistPlayer = new Tracklist(new YoutubePlayer(videoContainer));
+				cb(playemApp = new PlayemApp(tracklistPlayer));
+			});
+	})('videoEmbed', makeCallback());
 
 })(parseHashParams());
