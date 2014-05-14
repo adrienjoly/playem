@@ -72,7 +72,7 @@ function keepLettersOnly(str) {
 }
 
 function parseHashParams(){
-	var params = {}, strings = window.location.href.split(/[#&]+/).slice(1);
+	var params = {}, strings = window.location.href.split(/[#&\?]+/).slice(1);
 	for (var i in strings) {
 		var splitted = strings[i].split("=");
 		params[decodeURIComponent(splitted[0])] = typeof(splitted[1]) == "string" ? decodeURIComponent(splitted[1]) : null;
@@ -81,51 +81,6 @@ function parseHashParams(){
 }
 
 // main classes
-
-function Tracklist(ytPlayer){
-	return {
-		onTrackPlaying: null,
-		current: null,
-		vids: [],
-		clear: function(){
-			this.vids = [];
-			this.current = null;
-		},
-		addTrack: function(fbItem){
-			var track = null, embedId = ytPlayer.detect(fbItem.link);
-			if (embedId) {
-				track = {
-					i: this.vids.length,
-					eId: embedId, // id
-					//url: embedId,
-					url: fbItem.link,
-					name: fbItem.name,
-					desc: fbItem.description,
-					from: fbItem.from,
-					time: fbItem.updated_time,
-					msg: fbItem.message,
-					fbUrl: fbItem.actions[0].link
-				};
-				this.vids.push(track);
-			}
-			return track;
-		},
-		play: function(index){
-			var self = this;
-			console.log("play", index || 0, this.vids[index || 0]);
-			this.current = this.vids[index || 0];
-			ytPlayer.play(this.current.eId);
-			ytPlayer.onEnd = function() {
-				console.log("onEnd");
-				self.next();
-			};
-			this.onTrackPlaying(this.current);
-		},
-		next: function(){
-			this.play(this.current.i+1 % this.vids.length);
-		}
-	};
-}
 
 function FacebookImporter(){
 	var self = this;
@@ -259,11 +214,14 @@ function PlayemApp(tracklist){
 
 (function init(p){
 	var DEFAULTS = {
-		design: "default"
+		design: "default",
+		player: "youtube"
 	};
 	for (var i in DEFAULTS)
 		if (!p.hasOwnProperty(i))
 			p[i] = DEFAULTS[i];
+
+	console.log("playem parameters:", p);
 
 	var playemApp = null;
 
@@ -290,26 +248,23 @@ function PlayemApp(tracklist){
 
 	(function initPlayemUI(uiDir, cb){
 		var uiDir = uiDir || "/ui-default";
+		console.log("loading ui:", uiDir);
 		var makeCallback = new WhenDone(cb);
 		initFB(makeCallback());
 		loadCss(uiDir+"/styles.css", makeCallback());
 		loadJS(uiDir+"/ui.js", makeCallback());
 	})("/ui-" + keepLettersOnly(p.design), makeCallback());
 
-	(function initPlayer(videoContainer, cb){
-		if (p.player == "all")
-			loadJS("/js/playemWrapper.js", function(){
-				loadSoundManager(function(){
-					initPlayem(document.getElementById(videoContainer), "videoPlayer", function(playem){
-						cb(playemApp = new PlayemApp(new PlayemWrapper(playem)));
-					});
-				});
-			});
-		else
-			loadJS("/js/old/YoutubePlayer.js", function(){
-				var tracklistPlayer = new Tracklist(new YoutubePlayer(videoContainer));
+	(function initPlayer(plDir, cb){
+		console.log("loading player:", plDir);
+		var playerParams = {
+			videoContainer: 'videoEmbed'
+		};
+		loadJS(plDir + "/main.js", function(){
+			makeTracklistPlayer(playerParams, function(tracklistPlayer){
 				cb(playemApp = new PlayemApp(tracklistPlayer));
 			});
-	})('videoEmbed', makeCallback());
+		});
+	})("/pl-" + keepLettersOnly(p.player), makeCallback());
 
 })(parseHashParams());

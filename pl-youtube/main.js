@@ -40,3 +40,52 @@ function YoutubePlayer(elementId){
 		}
 	};
 }
+
+function Tracklist(ytPlayer){
+	return {
+		onTrackPlaying: null,
+		current: null,
+		vids: [],
+		clear: function(){
+			this.vids = [];
+			this.current = null;
+		},
+		addTrack: function(fbItem){
+			var track = null, embedId = ytPlayer.detect(fbItem.link);
+			if (embedId) {
+				track = {
+					i: this.vids.length,
+					eId: embedId, // id
+					//url: embedId,
+					url: fbItem.link,
+					name: fbItem.name,
+					desc: fbItem.description,
+					from: fbItem.from,
+					time: fbItem.updated_time,
+					msg: fbItem.message,
+					fbUrl: fbItem.actions[0].link
+				};
+				this.vids.push(track);
+			}
+			return track;
+		},
+		play: function(index){
+			var self = this;
+			console.log("play", index || 0, this.vids[index || 0]);
+			this.current = this.vids[index || 0];
+			ytPlayer.play(this.current.eId);
+			ytPlayer.onEnd = function() {
+				console.log("onEnd");
+				self.next();
+			};
+			this.onTrackPlaying(this.current);
+		},
+		next: function(){
+			this.play(this.current.i+1 % this.vids.length);
+		}
+	};
+}
+
+function makeTracklistPlayer(p, cb){
+	cb(new Tracklist(new YoutubePlayer(p.videoContainer)));
+}

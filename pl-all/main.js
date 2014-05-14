@@ -1,6 +1,8 @@
 window.SOUNDCLOUD_CLIENT_ID = "496ce54cc74f2e4ba1945ada07cd1c56";
 window.DEBUG = false; // for soundmanager
 
+var JS_PATH = "/pl-all";
+
 // components
 
 function initPlayem(playerContainer, playerId, cb) {
@@ -21,7 +23,7 @@ function initPlayem(playerContainer, playerId, cb) {
 			height: $(playerContainer).height(),
 			playerContainer: playerContainer
 		};
-	loadJS("/js/playem-min.js", function(){
+	loadJS(JS_PATH + "/playem-min.js", function(){
 		playem = new Playem();
 		PLAYERS.map(function(pl) {
 			//console.log("Init " + pl + " player...");
@@ -33,7 +35,7 @@ function initPlayem(playerContainer, playerId, cb) {
 
 function loadSoundManager(cb){
 	//console.info("initializing soundmanager2...");
-	loadJS("/js/soundmanager2" + (DEBUG ? ".js" : "-nodebug-jsmin.js"), function(){
+	loadJS(JS_PATH + "/soundmanager2" + (DEBUG ? ".js" : "-nodebug-jsmin.js"), function(){
 		soundManager.setup({debugMode: DEBUG, url: "/swf/soundmanager2_xdomain.swf", flashVersion: 9, onready: function() {
 			soundManager.isReady=true;
 		}});
@@ -91,11 +93,20 @@ function PlayemWrapper(playem){
 			} catch(e) {};
 		},
 		play: function(index){
-			var self = this;
+			//this.current = this.vids[index];
+			playem.stop();
 			playem.play(index);
 		},
 		next: function(){
 			playem.next();
 		}
 	};
+}
+
+function makeTracklistPlayer(p, cb){
+	loadSoundManager(function(){
+		initPlayem(document.getElementById(p.videoContainer), "videoPlayer", function(playem){
+			cb(new PlayemWrapper(playem));
+		});
+	});
 }
