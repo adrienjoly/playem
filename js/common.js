@@ -97,7 +97,7 @@ function FacebookImporter(){
 			for (var i in feed.data) {
 				var v = feed.data[i];
 				//console.log(v);
-				if (v && v.type=="video" && v.link) {
+				if (v && /*v.type=="video" &&*/ v.link) {
 					self.onNewVid(v);
 				}
 			}
