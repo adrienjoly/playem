@@ -2,24 +2,21 @@ function makeTracklistPlayer(p, cb){
 
 	var $log = $("<div id='debuglog' style='position:fixed;top:0;left:40%;width:60%;height:100%;overflow:auto;background:rgba(0,0,0,0.8);color:#00ff00;padding:5px;'>").appendTo("body");
 
-	$log.append("coucou<br>");
-
 	function htmlEntities(str) {
 	    return String(str || "").replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 	}
 
-	console = {
-		log: (function makeColorConsole(fct, color){
+	var oldLog = console.log;
+
+	console.log = (function makeColorConsole(fct, color){
 				return function(){
+					fct.apply(console, arguments);
 					for (var i in arguments)
 						if (arguments[i] instanceof Object || arguments[i] instanceof Array)
 							arguments[i] = JSON.stringify(arguments[i]);
-					fct.call(console, htmlEntities(Array.prototype.join.call(arguments, " ")) + "<br>");
+					$log.append(htmlEntities(Array.prototype.join.call(arguments, " ")) + "<br>");
 				};
-			})(console.log)
-	};
-
-	console.log("ouais"); //, {cool:true}, 34, "yeah!");
+			})(oldLog);
 
 	loadJS("/pl-all/main.js",function(){
 		window.DEBUG = true; // for soundmanager
