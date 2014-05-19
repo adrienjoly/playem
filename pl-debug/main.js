@@ -1,22 +1,43 @@
+function select_all(el) {
+    if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {
+        var range = document.createRange();
+        range.selectNodeContents(el);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+    } else if (typeof document.selection != "undefined" && typeof document.body.createTextRange != "undefined") {
+        var textRange = document.body.createTextRange();
+        textRange.moveToElementText(el);
+        textRange.select();
+    }
+}
+
 function makeTracklistPlayer(p, cb){
 
-	var $log = $("<div id='debuglog' style='position:fixed;top:0;left:40%;width:60%;height:100%;overflow:auto;background:rgba(0,0,0,0.8);color:#00ff00;padding:5px;'>").appendTo("body");
+	var $log = $("<div id='debuglog' style='position:fixed;top:0;left:40%;width:60%;height:100%;overflow:auto;background:rgba(0,0,0,0.8);padding:5px;font-size:10px;'>").appendTo("body");
+	var $btn = $('<button>select text</button>').css({position:"fixed",top:0,right:0}).appendTo("body").click(function(){
+		select_all(document.getElementById("debuglog"));
+	});
 
 	function htmlEntities(str) {
 	    return String(str || "").replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 	}
 
-	var oldLog = console.log;
+	function makeColorConsole(fct, css){
+		return function(){
+			fct.apply(console, arguments);
+			for (var i in arguments)
+				if (arguments[i] instanceof Object || arguments[i] instanceof Array)
+					arguments[i] = JSON.stringify(arguments[i]);
+			$('<p>' + htmlEntities(Array.prototype.join.call(arguments, " ")) + '</p>').css(css).appendTo($log);
+			$log[0].scrollTop = $log[0].scrollHeight;
+		};
+	}
 
-	console.log = (function makeColorConsole(fct, color){
-				return function(){
-					fct.apply(console, arguments);
-					for (var i in arguments)
-						if (arguments[i] instanceof Object || arguments[i] instanceof Array)
-							arguments[i] = JSON.stringify(arguments[i]);
-					$log.append(htmlEntities(Array.prototype.join.call(arguments, " ")) + "<br>");
-				};
-			})(oldLog);
+	console.log = makeColorConsole(console.log, {margin:0, color:"#aaaaaa"});
+	console.warn0 = makeColorConsole(console.warn, {margin:0, color:"#33aa33"});
+	console.warn1 = makeColorConsole(console.warn, {margin:0, color:"#aaaa33"});
+	console.warn2 = makeColorConsole(console.warn, {margin:0, color:"#aa3333"});
 
 	loadJS("/pl-all/main.js",function(){
 		window.DEBUG = true; // for soundmanager
@@ -48,10 +69,13 @@ function makeTracklistPlayer(p, cb){
 					}
 					try {
 						playem.addTrackByUrl(fbItem.link, metadata);
-						console.log("PLAY " + fbItem.link);
+						console.warn0("PLAY " + fbItem.link);
 						return metadata;
 					} catch(e) {
-						console.log("SKIP " + fbItem.link);
+						if (/youtube\.com/.test(fbItem.link))
+							console.warn2("SKIP " + fbItem.link);
+						else if (!/https\:\/\/www\.facebook\.com\/[a-zA-Z0-9\/\-\_\.]*photo/.test(fbItem.link))
+							console.warn1("SKIP " + fbItem.link);
 					};
 				},
 				play: function(index){
