@@ -1,6 +1,7 @@
 // simple Youtube video embedded, based on swfobject
 
 function YoutubePlayer(elementId){
+	var self;
 	var flashvars = {
 		autoplay:1
 	};
