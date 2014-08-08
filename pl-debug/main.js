@@ -1,3 +1,5 @@
+var PLAYER = "/pl-all/main.js";
+
 function select_all(el) {
     if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {
         var range = document.createRange();
@@ -39,7 +41,7 @@ function makeTracklistPlayer(p, cb){
 	console.warn1 = makeColorConsole(console.warn, {margin:0, color:"#aaaa33"});
 	console.warn2 = makeColorConsole(console.warn, {margin:0, color:"#aa3333"});
 
-	loadJS("/pl-all/main.js",function(){
+	loadJS(PLAYER, function(){
 		window.DEBUG = true; // for soundmanager
 
 		function PlayemWrapper(playem){
