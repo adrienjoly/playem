@@ -17,13 +17,15 @@ If you're feeling adventurous, you can try the development version that supports
 If you're willing to help me improve Playem (e.g. fixing bugs and adding missing videos), I developed a version that lists all the links that are returned by Facebook, so that you can identify which ones are supposed to be supported: http://www.playem.org/#player=debug
 
 In the latter case, here is how to proceed:
-1) open that link,
-2) click on the fb connect button,
-3) wait for a few dozens of links to be listed on the right of the screen,
-4) click on the "select text" button (top-right corner)
-5) copy and paste this text into a new email,
-6) please keep only the lines that you're sure should be supported by playem (because they're videos or audio tracks)
-7) send that email to contact at playem dot org, so that I can do my best to support these links
+
+1. open that link,
+2. click on the fb connect button,
+3. wait for a few dozens of links to be listed on the right of the screen,
+4. click on the "select text" button (top-right corner)
+5. copy and paste this text into a new email,
+6. please keep only the lines that you're sure should be supported by playem (because they're videos or audio tracks)
+7. send that email to contact at playem dot org, so that I can do my best to support these links
+
 
 ###How to develop and contribute your own UI
 
