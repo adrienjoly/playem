@@ -6,9 +6,9 @@ a social tv project
 [![Analytics](https://ga-beacon.appspot.com/UA-1858235-12/playem/github)](https://github.com/igrigorik/ga-beacon)
 
 
-###FAQ
+##FAQ
 
-####Videos are not playing / videos are missing
+###Videos are not playing / videos are missing
 
 Playem extracts the videos shared by your Facebook friends. Only Youtube videos are supported in the current version. So, please make sure that the videos you are missing in Playem are indeed hosted on Youtube.
 
@@ -26,8 +26,13 @@ In the latter case, here is how to proceed:
 6. please keep only the lines that you're sure should be supported by playem (because they're videos or audio tracks)
 7. send that email to contact at playem dot org, so that I can do my best to support these links
 
+###How does it work behind the scenes?
 
-###How to develop and contribute your own UI
+[This sequence diagram](https://drive.google.com/file/d/0B6p16in14iyYcGg3NVhDTVZxcXc/edit?usp=sharing) says it all.
+
+###The UI/design sucks... Can I contribute?
+
+Yes, you can! Here is how:
 
 ####Prerequisites
 
