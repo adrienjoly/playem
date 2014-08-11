@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="/js/jquery-1.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/js/swfobject.js"></script>
+	<!--<script src="/pl-all/soundmanager2-nodebug-jsmin.js"></script>-->
+	<!--<script src="../lib/soundmanager2-jsmin.js"></script>-->
+	<script src="/js/common.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/pl-all/main.js"></script>
+</head>
+<body>
+	<!--
+	<script>
+		soundManager.setup({
+			url: "/lib/",
+			flashVersion: 9,
+			onready: function() {
+				soundManager.isReady=true;
+			}
+		});
+		var SOUNDCLOUD_CLIENT_ID = "9d5bbaf9df494a4c23475d9fde1f69b4"; // TODO: out of this file
+		var DEEZER_APP_ID = 125765;
+		var DEEZER_CHANNEL_URL = window.location.href.substr(0, window.location.href.indexOf("/", 10)) + "/lib/deezer-channel.html";
+	</script>
+	-->
+	<div id="container">
+		<div id="videoPlayer">	
+		</div>		
+	</div>
+	<!--
+	<script src="test.js"></script>
+	<script src="test-players.js"></script>
+	-->
+	<script>
+	loadSoundManager(function(){
+		initPlayem(document.getElementById("container"), "videoPlayer", function(playem){
+			playemWrapper = new PlayemWrapper(playem);
+			var remaining = 0, timer = null;
+			function whenDone(){
+				clearTimeout(timer);
+				console.info("all tracks passed! :-)")
+				playem.stop();
+			}
+			function whenTimeout(){
+				console.warn("TIMEOUT => test failed. :-(");
+				playem.stop();
+			}
+			playem.on("onTrackChange", function(track){
+				console.log("trying to play", track.trackId || track.url, "...");
+				timer = setTimeout(whenTimeout, 8000);
+			});
+			playemWrapper.onTrackPlaying = function(track){
+				console.log("onTrackPlaying", track);
+				clearTimeout(timer);
+				setTimeout(function(){
+					if (!remaining--)
+						whenDone();
+					else
+						playem.next();
+				}, 2000);
+			}
+			// load urls, and test them
+			$.get("urls.txt", function(txt){
+				txt.split("\n").map(function addTrackByUrl(url){
+					if (url) {
+						playemWrapper.addTrack({
+							link: url,
+							actions: [{link: url}],
+						});
+						remaining++;
+					}
+				});
+				console.log("ready to play", remaining, "tracks");
+				playem.play(0);
+			});
+		});
+	});
+	</script>
+</body>
+</html>
