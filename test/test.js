@@ -3,167 +3,74 @@
  * @author adrienjoly
  **/
 
-function forEachAsync(fcts, cb) {
-	fcts = fcts || [];
-	(function next(){
-		var fct = fcts.shift();
-		if (!fct)
-			cb();
+(function runTests(listUrl, container, videoPlayer){
+
+	var playem, playemWrapper, queue, timer, totalTracks = 0, recognized = 0, prevLength = 0;
+
+	function whenDone(){
+		clearTimeout(timer);
+		console.info("all tracks passed! :-)")
+		playem.stop();
+	}
+
+	function whenTimeout(){
+		console.warn("TIMEOUT => test failed. :-(");
+		playem.stop();
+	}
+
+	function onTrackChange(track){
+		console.log("trying to play", track.index, "...");
+		timer = setTimeout(whenTimeout, 8000);
+	}
+
+	function onTrackPlaying(track){
+		console.log("ok");
+		clearTimeout(timer);
+		setTimeout(function(){
+			if (!--totalTracks)
+				whenDone();
+			else
+				playem.next();
+		}, 2000);
+	}
+
+	function getLastAdded(){
+		return queue[queue.length-1];
+	}
+
+	function addTrackByUrl(url){
+		if (!url)
+			return;
+		playemWrapper.addTrack({ link: url });
+		if (getLastAdded().trackId)
+			recognized++;
 		else
-			fct(next);
-	})();
-}
-
-function PlayemLoader() {
-
-	var DEFAULT_PLAYERS = [
-		"Youtube",
-		"SoundCloud",
-		"Vimeo",
-		"Dailymotion",
-		"Deezer",
-		"AudioFile",
-		"Bandcamp",
-	];
-
-	var DEFAULT_PLAYER_PARAMS = {
-		playerId: "genericplayer",
-		origin: window.location.host || window.location.hostname,
-		playerContainer: document.getElementById("container")
-	};
-
-	function load(players, playerParams, cb){
-		var playem = new Playem();
-		function makePlayerLoader(pl){
-			return function(next) {
-				function initPlayer(){
-					playem.addPlayer(window[pl + "Player"], playerParams); // instanciates player class
-					next();
-				}
-				console.log("Init " + pl + " player...");
-				if (window[pl+"Player"]) // check that class exists
-					initPlayer();
-				else
-					loader.includeJS("../playem-"+pl.toLowerCase()+".js?_t="+Date.now(), initPlayer);
-			};
-		}
-		forEachAsync(players.map(makePlayerLoader), function(){
-			cb(playem);
-		});
+			console.warn("unable to recognize track url:", url);
 	}
 
-	this.loadAllPlayers = function(cb){
-		load(DEFAULT_PLAYERS, DEFAULT_PLAYER_PARAMS, cb);
-		return this;
-	}
-}
+	loadSoundManager(function(){
+		initPlayem(document.getElementById(container), videoPlayer, function(playemInstance){
 
-function PlayemLogger() {
+			playem = playemInstance;
+			playem.setPref("loop", false);
+			playemWrapper = new PlayemWrapper(playem);
+			playem.on("onTrackChange", onTrackChange);
+			playemWrapper.onTrackPlaying = onTrackPlaying;
 
-	var LOG_PLAYER_EVENTS = false;
+			queue = playem.getQueue();
 
-	var EVENTS = [
-		"onError",
-		"onReady",
-		"onBuffering",
-		"onPlay",
-		"onPaused",
-		"onTrackInfo",
-		"onTrackChange",
-		"onEnd",
-		"loadMore",
-	];
-
-	var self = this;
-	this.log = []; // [[timestamp, tag, fct name, args...]]
-	var listeners = [];
-	var lastTypedEvent = {};
-
-	function makeLogger(evt){
-		return function(){
-			var entry = [ Date.now(), evt ].concat(Array.prototype.slice.call(arguments));
-			self.log.push(entry);
-			lastTypedEvent[evt] = entry;
-			if (LOG_PLAYER_EVENTS)
-				console.log.apply(console, /*entry*/[ Date.now(), evt ]);
-			for(var i in listeners)
-				listeners[i](evt, arguments);
-			return entry;
-		};
-	}
-	this.listenTo = function(playem){
-		var handlers = {};
-		for (i in EVENTS) {
-			var evt = EVENTS[i];
-			playem.on(evt, makeLogger(evt));
-		}
-		playem.on("onError", function(e){
-			console.warn("catched error", e);
-		});
-		return this;
-	}
-	this.addListener = function(fct){
-		listeners.push(fct);
-		return listeners.length-1;
-	};
-	this.removeListener = function(idx){
-		listeners.splice(idx);
-	};
-	this.getLastTypedEvent = function(evt){
-		return lastTypedEvent[evt];
-	};
-	this.until = function(evtNameList, cb, timeoutDelay, timeoutCb){
-		var listenerId, timeout, that = this, evtNames = {}, i;
-		if (typeof evtNameList == "string")
-			evtNameList = [evtNameList];
-		for(i in evtNameList)
-			evtNames[evtNameList[i]] = true;
-		function clean(){
-			clearTimeout(timeout);
-			that.removeListener(listenerId);
-		}
-		timeout = setTimeout(function(){
-			clean();
-			(timeoutCb || cb)();
-		}, timeoutDelay);
-		listenerId = this.addListener(function(evt, data){
-			if (evtNames[evt])
-				if (!cb(evt, data))
-					clean();
-		});
-	};
-}
-
-function TestRunner() {
-
-	var tests = [];
-	var finalCallback = null;
-
-	function wrapTest(testFct, title){
-		return function(nextTestFct){
-			console.log("%c[TEST] " + title + " ...", "color:#888");
-			testFct(function(res){
-				console.log('%c[TEST]=> ' + (!!res ? "OK" : "FAIL: " + title), "color:" + (!!res ? "green" : "red"));
-				if (!!res)
-					setTimeout(nextTestFct);
-				else
-					finalCallback({ok: false, title: title});
+			// load urls, and test them
+			$.get(listUrl, function(txt){
+				txt.split("\n").map(addTrackByUrl);
+				totalTracks = queue.length;
+				console.log("read", totalTracks, "tracks from", listUrl);
+				console.log("=>", recognized, "tracks were recognized");
+				if (totalTracks - recognized)
+					return;
+				console.log("ready to play", totalTracks, "tracks");
+				playem.play(0);
 			});
-		};
-	}
 
-	this.addTests = function(testMap){
-		for(var title in testMap)
-			tests.push(wrapTest(testMap[title], title));
-		return this;
-	}
-
-	this.run = function(cb){
-		finalCallback = cb;
-		forEachAsync(tests, function(){
-			console.log("%cAll tests done!", "color:green");
-			finalCallback({ok: true});
 		});
-		return this;
-	}
-}
+	});
+})("urls.txt", "container", "videoPlayer")

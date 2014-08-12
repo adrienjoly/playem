@@ -1,4 +1,4 @@
-/* playemjs commit: 6db6562fa2e8a003754b44a0a06906106fa7d015 */
+/* playemjs commit: 3475d0c40be82e2f973badb69e77b6d2bf44ac25 */
 
 function AudioFilePlayer(){
 	return AudioFilePlayer.super_.apply(this, arguments);
@@ -74,15 +74,12 @@ function AudioFilePlayer(){
 		}, 200);
 	}
 
-	Player.prototype.getEid = function(url, cb) {
+	Player.prototype.getEid = function(url) {
 		url = (url || "").split("#").pop();
 		if (!url)
-			return cb(null, this);
-		var ext = url.split("#").pop().toLowerCase().split(".").pop().toLowerCase();
-		if (ext == "mp3" || ext == "ogg")
-			cb(url, this);
-		else
-			cb(null, this);
+			return null;
+		var ext = url.split(".").pop().toLowerCase();
+		return (ext == "mp3" || ext == "ogg") ? url : null;
 	}
 	
 	Player.prototype.getTrackInfo = function(callback) {
@@ -191,12 +188,12 @@ function BandcampPlayer(){
     return url.indexOf("/bc/") == 0 || url.indexOf("bandcamp.com") != -1;
   }
 
-  function extractStreamUrl(eId) {
-    var parts = eId.split("#");
-    return parts.length < 2 || eId.indexOf("/bc/") ? null : parts.pop();
+  function isStreamUrl(url) {
+    return url.indexOf("bandcamp.com/download/track") != -1;
   }
 
   function fetchStreamUrl(url, cb){
+    url = "http://" + url.split("//").pop();
     $.getJSON(API_PREFIX + '/url/1/info?url=' + encodeURIComponent(url) + API_SUFFIX, function(data) {
       var trackId = (data || {}).track_id;
       if (!trackId)
@@ -242,11 +239,13 @@ function BandcampPlayer(){
   }
   
   //============================================================================
-  Player.prototype.getEid = function(url, cb) {
-    cb(isBandcampUrl(url) && url, this);
+  Player.prototype.getEid = function(url) {
+    return isBandcampUrl(url) && url.split("//").pop();
   }
 
   Player.prototype.playStreamUrl = function(url) {
+    url = "http://" + url.split("//").pop();
+    console.log("bc PLAY stream url:", url);
     var self = this;
     self.sound = soundManager.createSound({
       id: '_playem_bc_' + Date.now(),
@@ -273,13 +272,11 @@ function BandcampPlayer(){
 
   //============================================================================
   Player.prototype.play = function(id) {
-    var self = this, stream = extractStreamUrl(id);
-    if (stream)
-      this.playStreamUrl(stream);
+    var playStream = this.playStreamUrl.bind(this);
+    if (isStreamUrl(id))
+      playStream(id);
     else
-      fetchStreamUrl(id, function(stream){
-        self.playStreamUrl(stream);
-      });
+      fetchStreamUrl(id, playStream);
   }
   
   //============================================================================
@@ -323,7 +320,7 @@ function DailymotionPlayer(){
 
 (function() {
 
-	var regex = /https?:\/\/(?:www\.)?dailymotion.com(?:\/embed)?\/video\/([\w-]+)/,
+	var regex = /(dailymotion.com(?:\/embed)?\/video\/|\/dm\/)([\w-]+)/,
 		ignoreEnded = 0;
 		EVENT_MAP = {
 			0: "onEnded",
@@ -452,8 +449,8 @@ function DailymotionPlayer(){
 		this.safeClientCall("onEmbedReady");
 	}
 
-	Player.prototype.getEid = function(url, cb) {
-		cb((url.match(regex) || []).pop(), this);
+	Player.prototype.getEid = function(url) {
+		return regex.test(url) && RegExp.lastParen;
 	}
 
 	Player.prototype.play = function(id) {
@@ -519,7 +516,7 @@ function DeezerPlayer(){
   var SDK_URL = 'https://cdns-files.deezer.com/js/min/dz.js',
       SDK_LOADED = false,
       IS_LOGGED = false,
-      URL_REG = /(?:https?:)?\/\/(?:www\.)deezer\.com\/track\/(\d+)/i,
+      URL_REG = /(deezer\.com\/track|\/dz)\/(\d+)/,
       EVENT_MAP = {
         player_play: 'onPlaying',
         player_paused: 'onPaused',
@@ -556,8 +553,8 @@ function DeezerPlayer(){
   }
   
   //============================================================================
-  Player.prototype.getEid = function(url, cb) {
-    cb(URL_REG.test(url) ? RegExp.$1 : null, this);
+  Player.prototype.getEid = function(url) {
+    return URL_REG.test(url) && RegExp.lastParen;
   }
   
   //============================================================================
@@ -731,6 +728,15 @@ function DeezerPlayer(){
 
 window.$ = window.$ || function(){return window.$};
 $.getScript = $.getScript || function(js,cb){loader.includeJS(js,cb);};
+$.getJSON = $.getJSON || function(url, cb){
+  var cbName = "_cb_" + Date.now();
+  url = url.replace("callback=?", "callback=" + cbName);
+  window[cbName] = function(){
+    cb.apply(window, arguments);
+    delete window[cbName];
+  };
+  loader.includeJS(url);
+};
 
 function SoundCloudPlayer(){
 	return SoundCloudPlayer.super_.apply(this, arguments);
@@ -805,9 +811,17 @@ function SoundCloudPlayer(){
 		}
 	}
 
-	Player.prototype.getEid = function(url, cb) {
-		var matches = /(?:https?:)?\/\/(?:www\.)?soundcloud\.com\/([\w-_\/]+)/.exec(url);
-		cb(matches ? url.substr(url.lastIndexOf("/")+1) : null, this);
+	Player.prototype.getEid = function(url) {
+		if (/(soundcloud\.com)\/player\/\?.*url\=(.+)/.test(url))
+			url = decodeURIComponent(RegExp.lastParen);
+		if (/(soundcloud\.com)(\/[\w-_\/]+)/.test(url))
+			return RegExp.lastParen; //url.substr(url.lastIndexOf("/")+1);
+		else if (/snd\.sc\/([\w-_]+)/.test(url))
+			return RegExp.lastMatch;
+		// => returns:
+		// - /tracks/<number> (ready to stream)
+		// - or /<artistname>/<tracktitle>
+		// - or snd.sc/<hash>
 	}
 
 	Player.prototype.getTrackPosition = function(callback) {
@@ -823,15 +837,25 @@ function SoundCloudPlayer(){
 	};
 
 	Player.prototype.play = function(id) {
+		console.log("sc PLAY id:", id)
 		this.trackInfo = {};
-		this.embedVars.trackId = id;
-		//console.log("soundcloud play", this.embedVars);
 		var that = this;
-
-		SC.stream("/tracks/"+id, this.soundOptions, function(sound){
-			that.widget = sound;
-			that.callHandler("onEmbedReady", that);
-			//that.safeCall("play");
+		function playId(id){
+			console.log("=> sc PLAY id:", id)
+			that.embedVars.trackId = id;
+			//console.log("soundcloud play", this.embedVars);
+			SC.stream(id, that.soundOptions, function(sound){
+				that.widget = sound;
+				that.callHandler("onEmbedReady", that);
+				//that.safeCall("play");
+			});
+		}
+		if (id.indexOf("/tracks/") == 0)
+			return playId(id);
+		id = "http://" + (!id.indexOf("/") ? "soundcloud.com" : "") + id;
+		console.log("sc resolve url:", id);
+		$.getJSON("https://api.soundcloud.com/resolve.json?client_id=" + SOUNDCLOUD_CLIENT_ID + "&url=" + encodeURIComponent(id) + "&callback=?", function(data){
+			playId(data.id);
 		});
 	}
 
@@ -872,6 +896,7 @@ function VimeoPlayer(){
 (function() {
 
 	var USE_FLASH_VIMEO = true, // ... or "universal embed" (iframe), if false
+		MOOGALOOP = '//vimeo.com/moogaloop.swf?',  // 'http://a.vimeocdn.com/p/flash/moogaloop/5.2.42/moogaloop.swf?v=1.0.0'
 		EVENT_MAP = {
 			"play": "onPlaying",
 			"resume": "onPlaying",
@@ -939,7 +964,7 @@ function VimeoPlayer(){
 		    var args = Array.apply(null, arguments).slice(1) // exclude first arg
 		    return this.element["api_"+action].apply(this.element, args);
 		} catch (e) {
-			console.log("VIMEO error", e, e.stack);
+			console.log("VIMEO error", e);
 			//that.eventHandlers.onError && that.eventHandlers.onError(that, {source:"VimeoPayer", exception:e});
 		}
 	} : function(action, value) { // HTML 5 VERSION
@@ -949,9 +974,8 @@ function VimeoPlayer(){
 		this.element.contentWindow.postMessage(JSON.stringify(data), this.element.src.split("?")[0]);
 	}
 
-	Player.prototype.getEid = function(url, cb) {
-		var matches = /(?:https?:\/\/(?:www\.)?)?vimeo\.com\/(clip\:)?(\d+)/.exec(url);
-		cb(matches ? matches.pop() : null, this);
+	Player.prototype.getEid = function(url) {
+		return /(vimeo\.com\/(clip\:|video\/)?|\/vi\/)(\d+)/.test(url) && RegExp.lastParen;
 	}
 
 	Player.prototype.setTrackPosition = function(pos) {
@@ -1000,7 +1024,7 @@ function VimeoPlayer(){
 			// CHROME: ready called from here
 			embedAttrs = {
 			//	id: this.embedVars.playerId,
-				src: '//vimeo.com/moogaloop.swf?' + $.param(flashvars).replace(/\&/g, "&amp;"), // 'http://a.vimeocdn.com/p/flash/moogaloop/5.2.42/moogaloop.swf?v=1.0.0'
+				src: MOOGALOOP + $.param(flashvars).replace(/\&/g, "&amp;"),
 				type: 'application/x-shockwave-flash',
 				classid: "clsid:D27CDB6E-AE6D-11cf-96B8-444553540000",
 				allowscriptaccess: "always",
@@ -1029,7 +1053,7 @@ function VimeoPlayer(){
 				AllowScriptAccess: "always",
 				WMode: "opaque",
 				FlashVars: $.param(flashvars).replace(/\&/g, "&amp;"),
-				Movie: "//vimeo.com/moogaloop.swf?" + $.param(flashvars) //"http://a.vimeocdn.com/p/flash/moogaloop/5.2.42/moogaloop.swf?v=1.0.0&amp;time=1350388628283"
+				Movie: MOOGALOOP + $.param(flashvars)
 			};
 
 			innerHTML = "";
@@ -1038,8 +1062,8 @@ function VimeoPlayer(){
 
 			objectAttrs = {
 				id: this.embedVars.playerId,
-				src: '//vimeo.com/moogaloop.swf?' + $.param(flashvars).replace(/\&/g, "&amp;"), // 'http://a.vimeocdn.com/p/flash/moogaloop/5.2.42/moogaloop.swf?v=1.0.0'
-			//	data: 'http://vimeo.com/moogaloop.swf?' + $.param(flashvars), // 'http://a.vimeocdn.com/p/flash/moogaloop/5.2.42/moogaloop.swf?v=1.0.0'
+				src: MOOGALOOP + $.param(flashvars).replace(/\&/g, "&amp;"),
+			//	data: MOOGALOOP + $.param(flashvars),
 				type: 'application/x-shockwave-flash',
 				classid: "clsid:D27CDB6E-AE6D-11cf-96B8-444553540000",
 				allowscriptaccess: "always",
@@ -1243,9 +1267,9 @@ function YoutubePlayer(){
 		//this.isReady = true;
 	}
 
-	Player.prototype.getEid = function(url, cb) {
-		var matches = url.match(regex);
-		cb(matches ? matches.pop() : null, this);
+	Player.prototype.getEid = function(url) {
+		if (regex.test(url) || /\/yt\/([a-zA-Z0-9_\-]+)/.test(url) || /youtube\.com\/attribution_link\?.*v\%3D([^ \%]+)/.test(url))
+			return RegExp.lastParen;
 	}
 
 	Player.prototype.play = function(id) {
@@ -1426,17 +1450,23 @@ function Playem(playemPrefs) {
 				interval = setInterval(poll, 1000);
 		}
 
+		function addTrack(metadata, url) {
+			var track = {
+				index: trackList.length,
+				metadata: metadata || {}
+			};
+			if (url)
+				track.url = url;
+			trackList.push(track);
+			return track;
+		}
+
 		function addTrackById(id, player, metadata) {
 			if (id) {
-				var track = {
-					index: trackList.length,
-					trackId: id,
-					//img: img,
-					player: player,
-					playerName: player.label.replace(/ /g, "_"),
-					metadata: metadata || {}
-				};
-				trackList.push(track);
+				var track = addTrack(metadata);
+				track.trackId = id;
+				track.player = player;
+				track.playerName = player.label.replace(/ /g, "_");
 				return track;
 				//console.log("added:", player.label, "track", id, track/*, metadata*/);
 			}
@@ -1459,12 +1489,14 @@ function Playem(playemPrefs) {
 
 		function playTrack(track) {
 			//console.log("playTrack", track);
+			stopTrack();
+			currentTrack = track;
+			delete currentTrack.trackPosition; // = null;
+			delete currentTrack.trackDuration; // = null;
+			that.emit("onTrackChange", track);
+			if (!track.player)
+				return that.emit("onError", {code:"unrecognized_track", source:"Playem", track:track});
 			doWhenReady(track.player, function() {
-				stopTrack();
-				currentTrack = track;
-				delete currentTrack.trackPosition; // = null;
-				delete currentTrack.trackDuration; // = null;
-				that.emit("onTrackChange", track);
 				//console.log("playTrack #" + track.index + " (" + track.playerName+ ")", track);
 				callPlayerFct("play", track.trackId);
 				setVolume(volume);
@@ -1582,7 +1614,7 @@ function Playem(playemPrefs) {
 				eventHandlers[evt] = function(player, x){
 					if (player == currentTrack.player)
 						return fct(player, x);
-					else
+					else if (evt != "onEmbedReady")
 						console.warn("ignore event:", evt, "from", player, "instead of:", currentTrack.player);
 				};
 			});
@@ -1601,21 +1633,16 @@ function Playem(playemPrefs) {
 			clearQueue: function() {
 				trackList = [];
 			},
-			addTrackByUrl: function(url, metadata, cb) {
-				var p, remaining = players.length;
-				for (p=0; p<players.length; ++p)
-					players[p].getEid(url, function(eid, player){
-						//console.log("test ", player.label, eid);
-						if (eid) {
-							var track = addTrackById(eid, player, metadata);
-							//console.log("added track", track);
-							cb && cb(track);
-						}
-						else if (--remaining == 0) {
-							metadata && $(metadata.post).addClass("disabled");
-							throw new Error("unrecognized track: " + url);
-						}
-					});
+			addTrackByUrl: function(url, metadata) {
+				var p, player, eid;
+				for (p=0; p<players.length; ++p) {
+					player = players[p];
+					//console.log("test ", player.label, eid);
+					eid = player.getEid(url);
+					if (eid)
+						return addTrackById(eid, player, metadata);
+				}
+				return addTrack(metadata, url);
 			},
 			play: function(i) {
 				playTrack(i != undefined ? trackList[i] : currentTrack || trackList[0]);
