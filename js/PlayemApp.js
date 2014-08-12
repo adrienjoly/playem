@@ -61,6 +61,7 @@ function PlayemApp(tracklist){
 	var fbImporter = new FacebookImporter();
 
 	fbImporter.onNewVid = function(fbItem) {
+		// fbItem reference: https://developers.facebook.com/docs/graph-api/reference/v2.1/post/
 		var vid = tracklist.addTrack(fbItem);
 		if (vid) {
 			vid.li = $("<li>"+vid.name+"</li>").click(function() {
