@@ -67,18 +67,16 @@ function makeTracklistPlayer(p, cb){
 						from: fbItem.from,
 						time: fbItem.updated_time,
 						msg: fbItem.message,
-						fbUrl: (fbItem.actions || []).length && fbItem.actions[0].link
+						fbUrl: (fbItem.actions || [{}])[0].link
 					}
-					try {
-						playem.addTrackByUrl(fbItem.link, metadata);
+					if (playem.addTrackByUrl(fbItem.link, metadata).trackId) {
 						console.warn0("PLAY " + fbItem.link);
 						return metadata;
-					} catch(e) {
-						if (/youtube\.com/.test(fbItem.link))
-							console.warn2("SKIP " + fbItem.link);
-						else if (!/https\:\/\/www\.facebook\.com\/[a-zA-Z0-9\/\-\_\.]*photo/.test(fbItem.link))
-							console.warn1("SKIP " + fbItem.link);
-					};
+					}
+					else if (!/https\:\/\/www\.facebook\.com\/[a-zA-Z0-9\/\-\_\.]*photo/.test(fbItem.link))
+						console.warn1("SKIP " + fbItem.link);
+					else if (/youtube\.com/.test(fbItem.link))
+						console.warn2("SKIP " + fbItem.link);
 				},
 				play: function(index){
 					//this.current = this.vids[index];
