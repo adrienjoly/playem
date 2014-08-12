@@ -75,11 +75,12 @@ function PlayemWrapper(playem){
 			playem.clearQueue();
 		},
 		addTrack: function(fbItem){
+			var url = fbItem.source || fbItem.link;
 			//console.log(fbItem.link);
 			var metadata = {
 				i: playem.getQueue().length,
 				//eId: embedId,
-				url: fbItem.link,
+				url: url,
 				name: fbItem.name,
 				desc: fbItem.description,
 				from: fbItem.from,
@@ -87,8 +88,8 @@ function PlayemWrapper(playem){
 				msg: fbItem.message,
 				fbUrl: (fbItem.actions || [{}])[0].link
 			}
-			if (!playem.addTrackByUrl(fbItem.link, metadata).trackId) {
-				console.log("skipping", fbItem.link);
+			if (!playem.addTrackByUrl(url, metadata).trackId) {
+				console.log("skipping", url);
 				playem.getQueue().pop();
 			}
 			else
