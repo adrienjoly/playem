@@ -75,7 +75,7 @@ function PlayemWrapper(playem){
 			playem.clearQueue();
 		},
 		addTrack: function(fbItem){
-			console.log(fbItem.link);
+			//console.log(fbItem.link);
 			var metadata = {
 				i: playem.getQueue().length,
 				//eId: embedId,
@@ -85,7 +85,7 @@ function PlayemWrapper(playem){
 				from: fbItem.from,
 				time: fbItem.updated_time,
 				msg: fbItem.message,
-				fbUrl: fbItem.actions[0].link
+				fbUrl: (fbItem.actions || [{}])[0].link
 			}
 			try {
 				playem.addTrackByUrl(fbItem.link, metadata);
