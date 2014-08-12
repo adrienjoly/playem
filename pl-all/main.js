@@ -87,10 +87,12 @@ function PlayemWrapper(playem){
 				msg: fbItem.message,
 				fbUrl: (fbItem.actions || [{}])[0].link
 			}
-			try {
-				playem.addTrackByUrl(fbItem.link, metadata);
-				return metadata
-			} catch(e) {};
+			if (!playem.addTrackByUrl(fbItem.link, metadata).trackId) {
+				console.log("skipping", fbItem.link);
+				playem.getQueue().pop();
+			}
+			else
+				return metadata;
 		},
 		play: function(index){
 			//this.current = this.vids[index];
