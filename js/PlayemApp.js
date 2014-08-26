@@ -156,7 +156,7 @@ function PlayemApp(tracklist){
 				else
 					playemApp.logout();
 			}
-			FB.login(onFacebookSessionEvent, { scope: 'read_stream' + chkGroups ? ',user_groups' : '' }); // manage_pages	
+			FB.login(onFacebookSessionEvent, { scope: 'read_stream' + (chkGroups ? ',user_groups' : '') }); // manage_pages	
 		});
 		if (p.autoplay || window.startOnLoad) {
 			playemApp.setMode("main");
