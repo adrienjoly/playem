@@ -9,7 +9,8 @@ console.log("playem init...");
 function initFB(cb) {
 	window.fbAsyncInit = function() {
 		FB.init({
-			appId: inProd ? "143116132424011" : "222312447801944", 
+			appId: inProd ? "143116132424011" : "222312447801944",
+			version: 'v2.0',
 			status: true, 
 			cookie: true, 
 			xfbml: true,
@@ -19,7 +20,7 @@ function initFB(cb) {
 		cb();
 	};
 	var e = document.createElement('script');
-	e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+	e.src = document.location.protocol + '//connect.facebook.net/en_US/sdk.js';
 	e.async = true;
 	document.getElementById('fb-root').appendChild(e);
 };
