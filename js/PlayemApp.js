@@ -76,7 +76,7 @@ function PlayemApp(tracklist){
 		$("li").css('color', 'gray');
 		$("#playCursor").remove();
 		vid.li.css('color', 'white').prepend("<span id='playCursor'>► </span>");
-		$("#socialPane").html('<p>Shared by:</p><img src="http://graph.facebook.com/' + vid.from.id + '/picture"/>'
+		$("#socialPane").html('<p>Shared by:</p><img src="https://graph.facebook.com/' + vid.from.id + '/picture"/>'
 			+ '<p>' + vid.from.name + (vid.msg ? ": " + vid.msg : "") + '</p>'
 			+ '<p class="timestamp"><a href="'+vid.fbUrl+'" title="comment on facebook">' +vid.time + '</a></p>'
 			+ '<span class="postShareFB">&nbsp;</span>');
@@ -89,7 +89,7 @@ function PlayemApp(tracklist){
 				message: "This video was originally shared by " + vid.from.name + ".",
 				caption: "This video was originally shared by " + vid.from.name + ".",
 				description: "Watch your friends' videos in one click, using Play'em. No browsing required, it's just like TV!",
-				actions:  {name:'Watch Play\'em TV', link:'http://playem.org/'}
+				actions:  {name:'Watch Play\'em TV', link:'https://playem.org/'}
 			});
 		});
 		$("#btnNext").show().unbind().click(function(){
