@@ -80,14 +80,14 @@ function ContentEmbed (params) {
 		//regex: /https?\:\/\/(?:www\.)?youtu(?:\.)?be(?:\.com)?\/(?:(?:.*)?[\?\&]v=|v\/)?([a-zA-Z0-9_\-]+)/,
 		regex: /https?\:\/\/(?:www\.)?youtu(?:\.)?be(?:\.com)?\/(?:(?:.*)?[\?\&]v=|v\/|embed\/|\/)?([a-zA-Z0-9_\-]+)/,
 		getHref: function(embedRef) {
-			return 'http://www.youtube.com/v/' + embedRef.videoId;
+			return 'https://www.youtube.com/v/' + embedRef.videoId;
 		},
 		renderImg: function(embedRef, callback) {
 			return '<img src="'+embedRef.img+'" title="'+embedRef.name+'" />';
 		},
 		require: function(embedRef, callback) {
-			embedRef.img = 'http://i.ytimg.com/vi/' + embedRef.videoId + '/0.jpg';
-			$.getJSON("http://gdata.youtube.com/feeds/api/videos/"+embedRef.videoId+"?v=2&alt=jsonc&callback=?", function(data) {
+			embedRef.img = 'https://i.ytimg.com/vi/' + embedRef.videoId + '/0.jpg';
+			$.getJSON("https://gdata.youtube.com/feeds/api/videos/"+embedRef.videoId+"?v=2&alt=jsonc&callback=?", function(data) {
 				//console.log("youtube api response", data);
 				if (data && data.data)
 					embedRef.name = data.data.title;
@@ -98,7 +98,7 @@ function ContentEmbed (params) {
 		},
 		render: function(embedRef, options, callback) {
 			var options = options || embedDefaults;
-			var url = "http://youtube.com/embed/" + embedRef.videoId + '?enablejsapi=1&amp;fs=1&amp;wmode=opaque&amp;autoplay=' + (options.autoplay ? 1 : 0) + "&amp;origin=" + params.domain;
+			var url = "https://youtube.com/embed/" + embedRef.videoId + '?enablejsapi=1&amp;fs=1&amp;wmode=opaque&amp;autoplay=' + (options.autoplay ? 1 : 0) + "&amp;origin=" + params.domain;
 			var html = '<iframe src="'+url+'" width="'+options.width+'" height="'+options.height+'" frameborder="0" class="youtube-player" type="text/html" ></iframe>';
 			if (callback) callback(html)
 			return html;
@@ -109,18 +109,18 @@ function ContentEmbed (params) {
 		whydPrefix: "dm",
 		regex: /https?:\/\/(?:www\.)?dailymotion.com\/video\/([\w-_]+)/,
 		getHref: function(embedRef) {
-			return 'http://www.dailymotion.com/swf/' + embedRef.videoId;
+			return 'https://www.dailymotion.com/swf/' + embedRef.videoId;
 		},
 		renderImg: function(embedRef, callback) {
-			return '<img src="http://www.dailymotion.com/thumbnail/video/' + videoId+'" />';
+			return '<img src="https://www.dailymotion.com/thumbnail/video/' + videoId+'" />';
 		},
 		require: function(embedRef, callback) {
-			embedRef.img = 'http://www.dailymotion.com/thumbnail/video/' + embedRef.videoId + '/0.jpg';
+			embedRef.img = 'https://www.dailymotion.com/thumbnail/video/' + embedRef.videoId + '/0.jpg';
 			callback(embedRef);
 		},
 		render: function(embedRef, options, callback) {
 			options = options || embedDefaults;
-			var url = "http://www.dailymotion.com/swf/" + embedRef.videoId + '?autoPlay='+options.autoplay+'&related=0';
+			var url = "https://www.dailymotion.com/swf/" + embedRef.videoId + '?autoPlay='+options.autoplay+'&related=0';
 			var html = '<iframe src="'+url+'" width="'+options.width+'" height="'+options.height+'" frameborder="0" type="text/html" ></iframe>';
 			if (callback) callback(html)
 			return html;
@@ -134,11 +134,11 @@ function ContentEmbed (params) {
 			return embedRef.url; //'http://www.dailymotion.com/swf/' + embedRef.videoId;
 		},
 		renderImg: function(embedRef, callback) {
-			return '<img src="http://www.dailymotion.com/thumbnail/video/' + videoId+'" />';
+			return '<img src="https://www.dailymotion.com/thumbnail/video/' + videoId+'" />';
 		},
 		require: function(embedRef, callback) {
 			var url = encodeURIComponent(embedRef.url); // "http://www.dailymotion.com/embed/video/k7lToiW4PjB0Rx2Pqxt";
-			$.getJSON("http://www.dailymotion.com/services/oembed?format=json&url=" + url + "&callback=?", function(data){
+			$.getJSON("https://www.dailymotion.com/services/oembed?format=json&url=" + url + "&callback=?", function(data){
 				embedRef.img = data.thumbnail_url;//.replace("_preview_medium", "_preview_large");
 				embedRef.name = data.title;
 				embedRef.url = /src=\"([^\"]*)\"/.exec(data.html);
@@ -153,7 +153,7 @@ function ContentEmbed (params) {
 		},
 		render: function(embedRef, options, callback) {
 			options = options || embedDefaults;
-			var url = "http://www.dailymotion.com/swf/" + embedRef.videoId + '?autoPlay='+options.autoplay+'&related=0';
+			var url = "https://www.dailymotion.com/swf/" + embedRef.videoId + '?autoPlay='+options.autoplay+'&related=0';
 			var html = '<iframe src="'+url+'" width="'+options.width+'" height="'+options.height+'" frameborder="0" type="text/html" ></iframe>';
 			if (callback) callback(html)
 			return html;
@@ -164,13 +164,13 @@ function ContentEmbed (params) {
 		whydPrefix: "vi",
 		regex: /https?:\/\/(?:www\.)?vimeo\.com\/(clip\:)?(\d+)/, // http://stackoverflow.com/questions/2662485/simple-php-regex-question
 		getHref: function(embedRef) {
-			return 'http://vimeo.com/' + embedRef.videoId;
+			return 'https://vimeo.com/' + embedRef.videoId;
 		},
 		renderImg: function(embedRef, callback) {
 			return '<img src="'+embedRef.img+'" />';
 		},
 		require: function(embedRef, callback) {
-			$.getJSON("http://vimeo.com/api/v2/video/" + embedRef.videoId + ".json?callback=?", function(data) {
+			$.getJSON("https://vimeo.com/api/v2/video/" + embedRef.videoId + ".json?callback=?", function(data) {
 				//console.log("vimeo api response", data);
 				embedRef.img = data[0].thumbnail_medium;
 				callback(embedRef);
@@ -178,7 +178,7 @@ function ContentEmbed (params) {
 		},
 		render: function(embedRef, options, callback) {
 			var options = options || embedDefaults;
-			var url = 'http://player.vimeo.com/video/' + embedRef.videoId + '?title=0&amp;byline=0&amp;portrait=0&amp;wmode=opaque&amp;autoplay=' + (options.autoplay ? 1 : 0);
+			var url = 'https://player.vimeo.com/video/' + embedRef.videoId + '?title=0&amp;byline=0&amp;portrait=0&amp;wmode=opaque&amp;autoplay=' + (options.autoplay ? 1 : 0);
 			var html = '<iframe src="'+url+'" width="'+options.width+'" height="'+options.height+'" frameborder="0" type="text/html" ></iframe>';
 			if (callback) callback(html)
 			return html;
@@ -189,13 +189,13 @@ function ContentEmbed (params) {
 		whydPrefix: "sc",
 		regex: /https?:\/\/(?:www\.)?soundcloud\.com\/([\w-_\/]+)/,
 		getHref: function(embedRef) {
-			return 'http://soundcloud.com/' + embedRef.videoId;
+			return 'https://soundcloud.com/' + embedRef.videoId;
 		},
 		renderImg: function(embedRef, callback) {
 			return '<img src="'+embedRef.img+'" />';
 		},
 		require: function(embedRef, callback) {
-			var url = 'http://soundcloud.com/oembed?url='+encodeURIComponent(embedRef.url)+'&format=js&iframe=true&maxwidth='+embedDefaults.width + '&callback=?';
+			var url = 'https://soundcloud.com/oembed?url='+encodeURIComponent(embedRef.url)+'&format=js&iframe=true&maxwidth='+embedDefaults.width + '&callback=?';
 			$.getJSON(url, function(data, status) {
 				embedRef.name = data.title;
 				embedRef.html = data.html;
@@ -203,7 +203,7 @@ function ContentEmbed (params) {
 				if (scUrl && scUrl.length == 2) {
 					embedRef.contentId = decodeURIComponent(scUrl[1]);
 					var trackId = embedRef.contentId.split("/").pop();
-					$.getJSON("http://api.soundcloud.com/tracks/" + trackId + ".json?client_id="+scClientId+"&callback=?", function(data) {
+					$.getJSON("https://api.soundcloud.com/tracks/" + trackId + ".json?client_id="+scClientId+"&callback=?", function(data) {
 						if (data)
 							embedRef.img = data.artwork_url;
 						callback(embedRef);
@@ -220,8 +220,8 @@ function ContentEmbed (params) {
 				var hash = embedRef.id.indexOf("#")+1;
 				var scId = hash ? embedRef.id.substr(hash) : embedRef.videoId;
 				if (scId.indexOf("http") == -1)
-					scId = "http://api.soundcloud.com/tracks/" + scId;
-				var url = 'http://w.soundcloud.com/player/?url=' + encodeURIComponent(scId) + '&amp;show_artwork=true&amp;' + (options.autoplay ? 'auto_play=true' : '');
+					scId = "https://api.soundcloud.com/tracks/" + scId;
+				var url = 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(scId) + '&amp;show_artwork=true&amp;' + (options.autoplay ? 'auto_play=true' : '');
 				html = '<iframe src="'+url+'" width="'+embedDefaults.width+'" height="166" scrolling="no" frameborder="0" kwframeid="4"></iframe>';
 			}
 			if (callback) callback(html);
