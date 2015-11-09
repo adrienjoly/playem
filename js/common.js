@@ -1,4 +1,4 @@
-var inProd = window.location.href.indexOf("http://www.playem.org/") == 0;
+var inProd = window.location.href.indexOf("playem.org/") != -1;
 
 if (undefined == window.console)
 	console = { log:function(){} };
@@ -15,7 +15,7 @@ function initFB(cb) {
 			cookie: true, 
 			xfbml: true,
 			oauth : true,
-			channelUrl : 'http://www.playem.org/channel.html'
+			channelUrl : 'https://playem.org/channel.html'
 		});
 		cb();
 	};
