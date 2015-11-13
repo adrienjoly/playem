@@ -309,7 +309,8 @@
 		Parse.initialize('s43DxuFga8rI9FcLR38MSYoQ2kXFaMmsfg14PHck', 'Uaba3nQPQnVJWk7df3e8Hb0E4r2Dop96aHCCk1BC');
 		console.log('playem bk: polling parse...');
 		//Parse.Analytics.track('ran-bookmarket-from', { url: window.location.href });
-		var bksession = new Parse.Object.extend('bksession')();
+		var Session = Parse.Object.extend('bksessions');
+		var bksession = new Session();
 		bksession.set('url', window.location.href);
 		bksession.save(null, {
 		  success: function() {
