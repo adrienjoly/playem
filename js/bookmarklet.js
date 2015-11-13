@@ -311,7 +311,7 @@
 		//Parse.Analytics.track('ran-bookmarket-from', { url: window.location.href });
 		var Session = Parse.Object.extend('bksessions');
 		var bksession = new Session();
-		bksession.set('url', window.location.href);
+		bksession.set('fromUrl', window.location.href);
 		bksession.save(null, {
 		  success: function() {
 				console.log('playem bk: parse => ok');
