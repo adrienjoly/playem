@@ -294,17 +294,7 @@
 	
 	include(urlPrefix + "/bookmarklet.css" + urlSuffix, initplayemBookmarklet);
 
-	// load google analytics
-	var _gaq = _gaq || [];
-	_gaq.push(['_setAccount', 'UA-1858235-3']);
-	_gaq.push(['_trackPageview', '/js/bookmarklet.js']);
-	(function() {
-		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	})();
-
-	// load parse (also for analytics)
+	// load parse (for analytics)
 	function useParse() {
 		Parse.initialize('s43DxuFga8rI9FcLR38MSYoQ2kXFaMmsfg14PHck', 'Uaba3nQPQnVJWk7df3e8Hb0E4r2Dop96aHCCk1BC');
 		console.log('playem bk: polling parse...');
@@ -326,5 +316,15 @@
 	} catch(e) {
 		include('//www.parsecdn.com/js/parse-1.6.7.min.js', useParse);
 	}
+
+	// load google analytics
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-1858235-3']);
+	_gaq.push(['_trackPageview', '/js/bookmarklet.js']);
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
 
 })();
