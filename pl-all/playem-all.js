@@ -193,7 +193,7 @@ function BandcampPlayer(){
   }
 
   function fetchStreamUrl(url, cb){
-    url = "http://" + url.split("//").pop();
+    url = "https://" + url.split("//").pop();
     $.getJSON(API_PREFIX + '/url/1/info?url=' + encodeURIComponent(url) + API_SUFFIX, function(data) {
       var trackId = (data || {}).track_id;
       if (!trackId)
@@ -244,7 +244,7 @@ function BandcampPlayer(){
   }
 
   Player.prototype.playStreamUrl = function(url) {
-    url = "http://" + url.split("//").pop();
+    url = "https://" + url.split("//").pop();
     console.log("bc PLAY stream url:", url);
     var self = this;
     self.sound = soundManager.createSound({
@@ -852,7 +852,7 @@ function SoundCloudPlayer(){
 		}
 		if (id.indexOf("/tracks/") == 0)
 			return playId(id);
-		id = "http://" + (!id.indexOf("/") ? "soundcloud.com" : "") + id;
+		id = "https://" + (!id.indexOf("/") ? "soundcloud.com" : "") + id;
 		console.log("sc resolve url:", id);
 		$.getJSON("https://api.soundcloud.com/resolve.json?client_id=" + SOUNDCLOUD_CLIENT_ID + "&url=" + encodeURIComponent(id) + "&callback=?", function(data){
 			playId(data.id);

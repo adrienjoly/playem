@@ -34,7 +34,7 @@ function YoutubePlayer(elementId){
 		onEnd: null,
 		detect: function(url){
 			var vidId = (url.match(youtubeRegex) || []).pop(); // youtubeRegex.exec(fbItem.link);
-			return vidId && ('http://www.youtube.com/v/' + vidId + '?enablejsapi=1&fs=1&autoplay=1');
+			return vidId && ('https://www.youtube.com/v/' + vidId + '?enablejsapi=1&fs=1&autoplay=1');
 		},
 		play: function(url){
 			swfobject.embedSWF(url, elementId, '425', '344', '9.0.0', false, flashvars, params, attributes);
