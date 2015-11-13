@@ -310,10 +310,10 @@
 		console.log('polling parse');
 		Parse.Analytics.track('ran-bookmarket-from', { url: window.location.href });
 	}
-	if (!Parse) {
-		include("//www.parsecdn.com/js/parse-1.6.7.min.js", useParse);
-	} else {
+	try {
 		useParse();
+	} catch(e) {
+		include("//www.parsecdn.com/js/parse-1.6.7.min.js", useParse);
 	}
 
 })();
