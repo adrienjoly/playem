@@ -306,14 +306,24 @@
 
 	// load parse (also for analytics)
 	function useParse() {
-		Parse.initialize("s43DxuFga8rI9FcLR38MSYoQ2kXFaMmsfg14PHck", "Uaba3nQPQnVJWk7df3e8Hb0E4r2Dop96aHCCk1BC");
-		console.log('polling parse');
-		Parse.Analytics.track('ran-bookmarket-from', { url: window.location.href });
+		Parse.initialize('s43DxuFga8rI9FcLR38MSYoQ2kXFaMmsfg14PHck', 'Uaba3nQPQnVJWk7df3e8Hb0E4r2Dop96aHCCk1BC');
+		console.log('playem bk: polling parse...');
+		//Parse.Analytics.track('ran-bookmarket-from', { url: window.location.href });
+		var bksession = new Parse.Object.extend('bksession')();
+		bksession.set('url', window.location.href);
+		bksession.save(null, {
+		  success: function() {
+				console.log('playem bk: parse => ok');
+			},
+			error: function(res, err) {
+				console.log('playem bk: parsed failed:', err.message, err);
+			}
+		});
 	}
 	try {
 		useParse();
 	} catch(e) {
-		include("//www.parsecdn.com/js/parse-1.6.7.min.js", useParse);
+		include('//www.parsecdn.com/js/parse-1.6.7.min.js', useParse);
 	}
 
 })();
