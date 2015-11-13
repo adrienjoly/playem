@@ -1,5 +1,5 @@
 /**
- * play'em bookmarklet
+ * play'em bookmarklet v1.1
  * @author adrienjoly
  **/
 
@@ -303,5 +303,17 @@
 		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 	})();
+
+	// load parse (also for analytics)
+	function useParse() {
+		Parse.initialize("s43DxuFga8rI9FcLR38MSYoQ2kXFaMmsfg14PHck", "Uaba3nQPQnVJWk7df3e8Hb0E4r2Dop96aHCCk1BC");
+		console.log('polling parse');
+		Parse.Analytics.track('ran-bookmarket-from', { url: window.location.href });
+	}
+	if (!Parse) {
+		include("//www.parsecdn.com/js/parse-1.6.7.min.js", useParse);
+	} else {
+		useParse();
+	}
 
 })();
