@@ -167,7 +167,7 @@
 			label: "Dailymotion video",
 			regex: /https?:\/\/(?:www\.)?dailymotion.com\/video\/([\w-_]+)/,
 			getImg: function(id, cb) {
-				cb("http://www.dailymotion.com/thumbnail/video/" + id);
+				cb("https://www.dailymotion.com/thumbnail/video/" + id);
 			}
 		},
 		{
@@ -175,11 +175,11 @@
 			regex: /https?:\/\/(?:www\.)?dailymotion.com\/embed\/video\/([\w-_]+)/,
 			getImg: function(id, cb) {
 				var callbackFct = "dmCallback_" + id.replace(/[-\/]/g, "__");
-				var url = encodeURIComponent("http://www.dailymotion.com/embed/video/"+id); // "k7lToiW4PjB0Rx2Pqxt";
+				var url = encodeURIComponent("https://www.dailymotion.com/embed/video/"+id); // "k7lToiW4PjB0Rx2Pqxt";
 				window[callbackFct] = function(data) {
 					cb(data.thumbnail_url);
 				};
-				include("http://www.dailymotion.com/services/oembed?format=json&url=" + url + "&callback=" + callbackFct);
+				include("https://www.dailymotion.com/services/oembed?format=json&url=" + url + "&callback=" + callbackFct);
 			}
 		},
 		{
@@ -190,7 +190,7 @@
 				window[callbackFct] = function(data) {
 					cb(data[0].thumbnail_medium);
 				};
-				include("http://vimeo.com/api/v2/video/" + id + ".json?callback="+callbackFct);
+				include("https://vimeo.com/api/v2/video/" + id + ".json?callback="+callbackFct);
 			}
 		},
 		{
@@ -198,16 +198,16 @@
 			regex: /https?:\/\/(?:www\.)?soundcloud\.com\/([\w-_\/]+)/,
 			getImg: function(id, cb) {
 				var callbackFct = "scCallback_" + id.replace(/[-\/]/g, "__");
-				var url = encodeURIComponent("http://soundcloud.com/"+id);
+				var url = encodeURIComponent("https://soundcloud.com/"+id);
 				window[callbackFct] = function(data) {
 					var trackUrl = decodeURIComponent(/url=([^&]*)&/.exec(data.html)[1]);
 					var trackId = trackUrl.split("/").pop();
 					window[callbackFct] = function(data) {
 						cb(data.artwork_url);
 					};
-					include("http://api.soundcloud.com/tracks/" + trackId + ".json?client_id="+scClientId+"&callback="+callbackFct);
+					include("https://api.soundcloud.com/tracks/" + trackId + ".json?client_id="+scClientId+"&callback="+callbackFct);
 				};
-				include('http://soundcloud.com/oembed?url='+url+'&format=js&iframe=true&callback=' + callbackFct);
+				include('https://soundcloud.com/oembed?url='+url+'&format=js&iframe=true&callback=' + callbackFct);
 			}
 		}*/
 	];
@@ -215,7 +215,7 @@
 	//var done = false;
 
 	function unwrapFacebookLink(src) {
-		// e.g. http://www.facebook.com/l.php?u=http%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DKhXn0anD1lE&h=AAQFjMJBoAQFTPOP4HzFCv0agQUHB6Un31ArdmwvxzZxofA
+		// e.g. https://www.facebook.com/l.php?u=http%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DKhXn0anD1lE&h=AAQFjMJBoAQFTPOP4HzFCv0agQUHB6Un31ArdmwvxzZxofA
 		var fbLink = src.split("facebook.com/l.php?u=");
 		if (fbLink.length) {
 			fbLink = fbLink.pop().split("&").shift();

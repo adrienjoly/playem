@@ -32,7 +32,7 @@ $(function() {
 				vid = {
 					i:vids.length, 
 					id:vid,
-					//url:'http://www.youtube.com/v/' + vid + '?enablejsapi=1&fs=1&autoplay=1', // /embed/
+					//url:'https://www.youtube.com/v/' + vid + '?enablejsapi=1&fs=1&autoplay=1', // /embed/
 					html: embedRef.embedType.render(embedRef, embedParams),
 					name:fbItem.name, 
 					desc:fbItem.description,
@@ -54,7 +54,7 @@ $(function() {
 		$("#playCursor").remove();
 		window.current = current = vid;
 		current.li.css('color', 'white').prepend("<span id='playCursor'>► </span>");
-		$("#socialPane").html('<p>Shared by:</p><img src="http://graph.facebook.com/' + vid.from.id + '/picture"/>'
+		$("#socialPane").html('<p>Shared by:</p><img src="https://graph.facebook.com/' + vid.from.id + '/picture"/>'
 			+ '<p>' + vid.from.name + (vid.msg ? ": " + vid.msg : "") + '</p>'
 			+ '<p class="timestamp"><a href="'+vid.fbUrl+'" title="comment on facebook">' +vid.time + '</a></p>'
 			+ '<span class="postShareFB" onclick="shareVideo()">&nbsp;</span>')
@@ -100,11 +100,11 @@ $(function() {
 				method: 'feed',
 				message: "I have found this great video shared by " + vid.from.name + ", thanks to Play'em!",
 				name: vid.name,
-				link: 'http://adrienjoly.com/playem/#yt='+vid.id,
-				picture: 'http://i.ytimg.com/vi/' + vid.id + '/0.jpg', //'http://adrienjoly.com/playem/playem.png',
+				link: 'https://adrienjoly.com/playem/#yt='+vid.id,
+				picture: 'https://i.ytimg.com/vi/' + vid.id + '/0.jpg', //'https://adrienjoly.com/playem/playem.png',
 				caption: "I have found this great video shared by " + vid.from.name + ", thanks to Play'em!",
 				description: "Play'em is a simple way to watch the cool videos you friends share on Facebook. Play in one click, no browsing required, just like TV!",
-				actions:  {name:'Watch Play\'em TV', link:'http://adrienjoly.com/playem/'}
+				actions:  {name:'Watch Play\'em TV', link:'https://adrienjoly.com/playem/'}
 			},
 			function(response) {
 				if (response && response.post_id) {
@@ -196,7 +196,7 @@ $(function() {
   
 	var ytLink = window.location.href.indexOf("yt=");
 	if (ytLink > 0)
-		openVideoOverlay('http://www.youtube.com/v/' + window.location.href.substr(ytLink+3));
+		openVideoOverlay('https://www.youtube.com/v/' + window.location.href.substr(ytLink+3));
 	else if (window.startOnLoad)
 		loadMore();
 });

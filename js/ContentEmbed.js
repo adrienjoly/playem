@@ -131,13 +131,13 @@ function ContentEmbed (params) {
 		whydPrefix: "dm",
 		regex: /https?:\/\/(?:www\.)?dailymotion.com\/embed\/video\/([\w-_]+)/,
 		getHref: function(embedRef) {
-			return embedRef.url; //'http://www.dailymotion.com/swf/' + embedRef.videoId;
+			return embedRef.url; //'https://www.dailymotion.com/swf/' + embedRef.videoId;
 		},
 		renderImg: function(embedRef, callback) {
 			return '<img src="https://www.dailymotion.com/thumbnail/video/' + videoId+'" />';
 		},
 		require: function(embedRef, callback) {
-			var url = encodeURIComponent(embedRef.url); // "http://www.dailymotion.com/embed/video/k7lToiW4PjB0Rx2Pqxt";
+			var url = encodeURIComponent(embedRef.url); // "https://www.dailymotion.com/embed/video/k7lToiW4PjB0Rx2Pqxt";
 			$.getJSON("https://www.dailymotion.com/services/oembed?format=json&url=" + url + "&callback=?", function(data){
 				embedRef.img = data.thumbnail_url;//.replace("_preview_medium", "_preview_large");
 				embedRef.name = data.title;
