@@ -170,7 +170,7 @@ function PlayemApp(tracklist){
 		initFB(makeCallback());
 		loadCss(uiDir+"/styles.css", makeCallback());
 		loadJS(uiDir+"/ui.js", makeCallback());
-	})("/ui-" + keepLettersOnly(p.design), makeCallback());
+	})("ui-" + keepLettersOnly(p.design), makeCallback());
 
 	(function initPlayer(plDir, cb){
 		console.log("loading player:", plDir);
@@ -182,6 +182,6 @@ function PlayemApp(tracklist){
 				cb(playemApp = new PlayemApp(tracklistPlayer));
 			});
 		});
-	})("/pl-" + keepLettersOnly(p.player), makeCallback());
+	})("pl-" + keepLettersOnly(p.player), makeCallback());
 
 })(parseHashParams());
