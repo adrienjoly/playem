@@ -1,4 +1,4 @@
-var inProd = window.location.href.indexOf("playem.org/") != -1;
+var inProd = window.location.href.indexOf("adrienjoly.com/playem/") != -1;
 
 if (undefined == window.console)
 	console = { log:function(){} };
@@ -15,7 +15,7 @@ function initFB(cb) {
 			cookie: true, 
 			xfbml: true,
 			oauth : true,
-			channelUrl : 'https://playem.org/channel.html'
+			channelUrl : 'https://adrienjoly.com/playem/channel.html'
 		});
 		cb();
 	};

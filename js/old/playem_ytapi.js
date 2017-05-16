@@ -128,11 +128,11 @@ $(function() {
 				method: 'feed',
 				message: "I have found this great video shared by " + vid.from.name + ", thanks to Play'em!",
 				name: vid.name,
-				link: 'http://www.playem.org/#yt='+vid.id,
-				picture: 'http://i.ytimg.com/vi/' + vid.id + '/0.jpg', //'http://playem.org/playem.png',
+				link: 'http://adrienjoly.com/playem/#yt='+vid.id,
+				picture: 'http://i.ytimg.com/vi/' + vid.id + '/0.jpg', //'http://adrienjoly.com/playem/playem.png',
 				caption: "I have found this great video shared by " + vid.from.name + ", thanks to Play'em!",
 				description: "Play'em is a simple way to watch the cool videos you friends share on Facebook. Play in one click, no browsing required, just like TV!",
-				actions:  {name:'Watch Play\'em TV', link:'http://playem.org/'}
+				actions:  {name:'Watch Play\'em TV', link:'http://adrienjoly.com/playem/'}
 			},
 			function(response) {
 				if (response && response.post_id) {

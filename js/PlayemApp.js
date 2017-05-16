@@ -89,7 +89,7 @@ function PlayemApp(tracklist){
 				message: "This video was originally shared by " + vid.from.name + ".",
 				caption: "This video was originally shared by " + vid.from.name + ".",
 				description: "Watch your friends' videos in one click, using Play'em. No browsing required, it's just like TV!",
-				actions:  {name:'Watch Play\'em TV', link:'https://playem.org/'}
+				actions:  {name:'Watch Play\'em TV', link:'https://adrienjoly.com/playem/'}
 			});
 		});
 		$("#btnNext").show().unbind().click(function(){

@@ -12,9 +12,9 @@ a social tv project
 
 Playem extracts the videos shared by your Facebook friends. Only Youtube videos are supported in the current version. So, please make sure that the videos you are missing in Playem are indeed hosted on Youtube.
 
-If you're feeling adventurous, you can try the development version that supports more sources: http://www.playem.org/#player=all
+If you're feeling adventurous, you can try the development version that supports more sources: https://adrienjoly.com/playem/#player=all
 
-If you're willing to help me improve Playem (e.g. fixing bugs and adding missing videos), I developed a version that lists all the links that are returned by Facebook, so that you can identify which ones are supposed to be supported: http://www.playem.org/#player=debug
+If you're willing to help me improve Playem (e.g. fixing bugs and adding missing videos), I developed a version that lists all the links that are returned by Facebook, so that you can identify which ones are supposed to be supported: https://adrienjoly.com/playem/#player=debug
 
 In the latter case, here is how to proceed:
 
@@ -90,4 +90,4 @@ Yes, you can! Here is how:
 
   `git push`
 
-5. then you can "pull request" from your project's page on github, if you want your changes to be pushed to playem.org
+5. then you can "pull request" from your project's page on github, if you want your changes to be pushed to adrienjoly.com/playem

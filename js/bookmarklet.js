@@ -29,7 +29,7 @@
 	var player = null;
 	var currentVideo = null;
 
-	var urlPrefix = findScriptHost("/js/bookmarklet.js") || "https://playem.org";
+	var urlPrefix = findScriptHost("/js/bookmarklet.js") || "https://adrienjoly.com/playem";
 	var urlSuffix = "?" + (new Date()).getTime();
 	//var scClientId = "9d5bbaf9df494a4c23475d9fde1f69b4";
 	var body = document.getElementsByTagName("body")[0];
