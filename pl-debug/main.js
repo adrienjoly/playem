@@ -1,4 +1,4 @@
-var PLAYER = "/pl-all/main.js";
+var PLAYER = "pl-all/main.js";
 
 function select_all(el) {
     if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {

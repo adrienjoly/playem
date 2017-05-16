@@ -1,7 +1,7 @@
 window.SOUNDCLOUD_CLIENT_ID = "496ce54cc74f2e4ba1945ada07cd1c56";
 window.DEBUG = false; // for soundmanager
 
-var JS_PATH = "/pl-all";
+var JS_PATH = "pl-all";
 
 // components
 
